@@ -1,86 +1,131 @@
+// --- Syllable Pools ---
+
 const simpleSyllables = [
-  "ma", "mo", "mu",
-  "na", "no", "nu",
-  "ra", "ro", "ru",
-  "ka", "ko", "ku",
-  "ga", "go", "gu",
-  "ba", "bo", "bu",
-  "sa", "so", "su",
-  "ta", "to", "tu",
-  "da", "do", "du",
+  "ma","mo","mu",
+  "na","no","nu",
+  "ra","ro","ru",
+  "ka","ko","ku",
+  "ga","go","gu",
+  "ba","bo","bu",
+  "sa","so","su",
+  "ta","to","tu",
+  "da","do","du" // testing D sounds
 ];
 
 const clusterSyllables = [
-  "kra", "kro", "kru",
-  "gra", "gro", "gru",
-  "bra", "bro", "bru",
+  "kra","kro","kru",
+  "gra","gro","gru",
+  "bra","bro","bru"
 ];
 
-const endings = [
-  "na", "no", "ra", "ro", "mo", "bu", "ku", "ru", "du", "do", "naku",
-];
+// Special ending only
+const specialEndings = ["naku"];
 
-function pick(arr) {
+// --- Helpers ---
+
+function rand(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function S() { return pick(simpleSyllables); }
-function C() { return pick(clusterSyllables); }
-function E() { return pick(endings); }
+function S() {
+  return rand(simpleSyllables);
+}
 
-// Patterns: each returns an array of syllable strings
-const patterns = [
-  () => [S(), E()],
-  () => [S(), E()],                   // weighted double: 2-syl is common
-  () => [S(), S(), E()],
-  () => [S(), S(), E()],              // weighted double: 3-syl is common
-  () => [C(), S(), E()],
-  () => [S(), C(), E()],
-  () => [S(), S(), S(), E()],
-  () => { const a = S(); const b = S(); return [a, b, a, b]; }, // full repeat
-  () => { const a = S(); const b = S(); return [a, b, a, b]; }, // weighted double
+function C() {
+  return rand(clusterSyllables);
+}
+
+function NAKU() {
+  return "naku";
+}
+
+// Capitalize final name
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// --- Pattern Families ---
+
+const patternFamilies = {
+  smooth: [
+    () => [S(), S()],
+    () => [S(), S(), S()],
+    () => [S(), S(), S(), S()],
+  ],
+
+  croaky: [
+    () => [C(), S(), S()],
+    () => [S(), C(), S()],
+    () => [C(), C(), S()],
+    () => [C(), S(), C()],
+    () => [S(), C(), C()],
+    () => [C(), C(), S(), S()],
+    () => [S(), C(), S(), S()],
+  ],
+
+  repeating: [
+    () => {
+      const a = S();
+      const b = S();
+      return [a, b, a, b];
+    }
+  ],
+
+  nakuEnding: [
+    () => [S(), S(), NAKU()],
+    () => [C(), S(), NAKU()],
+    () => [S(), C(), NAKU()],
+    () => [C(), C(), NAKU()],
+    () => [S(), S(), S(), NAKU()],
+    () => [C(), S(), S(), NAKU()],
+  ]
+};
+
+// --- Weights (tune these for vibe) ---
+const familyWeights = [
+  { name: "smooth", weight: 35 },
+  { name: "croaky", weight: 35 },
+  { name: "repeating", weight: 20 },
+  { name: "nakuEnding", weight: 10 }
 ];
 
-function containsDama(syllables) {
-  return syllables.join('').includes('dama');
+function chooseFamily() {
+  const total = familyWeights.reduce((sum, f) => sum + f.weight, 0);
+  let r = Math.random() * total;
+
+  for (const f of familyWeights) {
+    if (r < f.weight) return f.name;
+    r -= f.weight;
+  }
 }
 
-export function generateName() {
-  let syllables;
-  let attempts = 0;
+// --- Name Generator ---
 
-  do {
-    const pattern = pick(patterns);
-    syllables = pattern();
+function generateName() {
+  const familyName = chooseFamily();
+  const family = patternFamilies[familyName];
+  const pattern = rand(family);
+  let syllables = pattern();
 
-    // "naku" as ending requires at least 3 syllables total
-    const joined = syllables.join('');
-    if (joined === 'naku') { continue; }
-    if (joined.endsWith('naku') && syllables.length < 3) { continue; }
+  let name = syllables.join("");
 
-    attempts++;
-  } while (containsDama(syllables) && attempts < 20);
-
-  // Occasionally duplicate a 2-syllable result (outside of patterns) for extra repetition
-  if (syllables.length === 2 && Math.random() < 0.25) {
-    syllables = [...syllables, ...syllables];
+  // Avoid sacred word "dama"
+  if (name.includes("dama")) {
+    return generateName();
   }
 
-  // Capitalize: first letter, and first letter of the repeated half if applicable
-  const isRepeat = syllables.length === 4 &&
-    syllables[0] === syllables[2] &&
-    syllables[1] === syllables[3];
+  return capitalize(name);
+}
 
-  if (isRepeat) {
-    const half = syllables.slice(0, 2).join('');
-    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-    return cap(half) + cap(half);
+// --- Generate Multiple Names ---
+
+function generateNames(count = 10) {
+  const results = [];
+  for (let i = 0; i < count; i++) {
+    results.push(generateName());
   }
-
-  const raw = syllables.join('');
-  return raw.charAt(0).toUpperCase() + raw.slice(1);
+  return results;
 }
 
-export function generateNames(count = 8) {
-  return Array.from({ length: count }, generateName);
-}
+// Example:
+console.log(generateNames(20));
