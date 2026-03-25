@@ -1,59 +1,83 @@
-const CONSONANTS = ['k', 'n', 'm', 'r', 's', 'h', 'b', 'p', 't', 'd'];
-const VOWELS = ['a', 'o', 'u', 'a', 'o', 'u', 'i']; // i appears less often
-const CLUSTERS = ['kr', 'gr', 'br'];
+const simpleSyllables = [
+  "ma", "mo", "mu",
+  "na", "no", "nu",
+  "ra", "ro", "ru",
+  "ka", "ko", "ku",
+  "ga", "go", "gu",
+  "ba", "bo", "bu",
+  "sa", "so", "su",
+  "ta", "to", "tu",
+  "da", "do", "du",
+];
+
+const clusterSyllables = [
+  "kra", "kro", "kru",
+  "gra", "gro", "gru",
+  "bra", "bro", "bru",
+];
+
+const endings = [
+  "na", "no", "ra", "ro", "mo", "bu", "ku", "ru", "du", "do", "naku",
+];
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function makeSyllable(useCluster = false) {
-  const onset = useCluster ? pick(CLUSTERS) : pick(CONSONANTS);
-  return onset + pick(VOWELS);
+function S() { return pick(simpleSyllables); }
+function C() { return pick(clusterSyllables); }
+function E() { return pick(endings); }
+
+// Patterns: each returns an array of syllable strings
+const patterns = [
+  () => [S(), E()],
+  () => [S(), E()],                   // weighted double: 2-syl is common
+  () => [S(), S(), E()],
+  () => [S(), S(), E()],              // weighted double: 3-syl is common
+  () => [C(), S(), E()],
+  () => [S(), C(), E()],
+  () => [S(), S(), S(), E()],
+  () => { const a = S(); const b = S(); return [a, b, a, b]; }, // full repeat
+  () => { const a = S(); const b = S(); return [a, b, a, b]; }, // weighted double
+];
+
+function containsDama(syllables) {
+  return syllables.join('').includes('dama');
 }
 
 export function generateName() {
-  const totalSyllables = 2 + Math.floor(Math.random() * 3); // 2, 3, or 4
-
-  // Determine special ending
-  let specialEnding = null;
-  const roll = Math.random();
-  if (roll < 0.2) {
-    specialEnding = 'na';
-  } else if (roll < 0.35 && totalSyllables >= 3) {
-    // "naku" ending occupies 2 syllable slots, so requires at least 3 total
-    specialEnding = 'naku';
-  }
-
-  const endingSlots = specialEnding === 'naku' ? 2 : specialEnding === 'na' ? 1 : 0;
-  const freeSlots = totalSyllables - endingSlots;
-
-  // 0, 1, or 2 clusters among the free syllables
-  const numClusters = Math.random() < 0.35 ? (Math.random() < 0.6 ? 1 : 2) : 0;
-
-  // Pick cluster positions, no two clusters adjacent
-  const clusterPositions = new Set();
+  let syllables;
   let attempts = 0;
-  while (clusterPositions.size < numClusters && attempts < 50) {
-    const pos = Math.floor(Math.random() * freeSlots);
-    if (!clusterPositions.has(pos - 1) && !clusterPositions.has(pos + 1)) {
-      clusterPositions.add(pos);
-    }
+
+  do {
+    const pattern = pick(patterns);
+    syllables = pattern();
+
+    // "naku" as ending requires at least 3 syllables total
+    const joined = syllables.join('');
+    if (joined === 'naku') { continue; }
+    if (joined.endsWith('naku') && syllables.length < 3) { continue; }
+
     attempts++;
+  } while (containsDama(syllables) && attempts < 20);
+
+  // Occasionally duplicate a 2-syllable result (outside of patterns) for extra repetition
+  if (syllables.length === 2 && Math.random() < 0.25) {
+    syllables = [...syllables, ...syllables];
   }
 
-  // Build the name
-  const parts = [];
-  for (let i = 0; i < freeSlots; i++) {
-    parts.push(makeSyllable(clusterPositions.has(i)));
+  // Capitalize: first letter, and first letter of the repeated half if applicable
+  const isRepeat = syllables.length === 4 &&
+    syllables[0] === syllables[2] &&
+    syllables[1] === syllables[3];
+
+  if (isRepeat) {
+    const half = syllables.slice(0, 2).join('');
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+    return cap(half) + cap(half);
   }
 
-  if (specialEnding === 'naku') {
-    parts.push('na', 'ku');
-  } else if (specialEnding === 'na') {
-    parts.push('na');
-  }
-
-  const raw = parts.join('');
+  const raw = syllables.join('');
   return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
