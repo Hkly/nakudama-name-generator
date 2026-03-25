@@ -65,8 +65,13 @@ const patternFamilies = {
 
   repeating: [
     () => {
-      const a = S();
-      const b = S();
+      let a = S();
+      let b = S();
+
+      while (a === b) {
+        b = S();
+      }
+
       return [a, b, a, b];
     }
   ],
