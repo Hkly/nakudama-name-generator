@@ -1,8 +1,5 @@
 import { useState } from 'react'
-
-function generateNames() {
-  return Array(8).fill('Placeholder Name')
-}
+import { generateNames } from './generator.js'
 
 export default function App() {
   const [names, setNames] = useState([])
