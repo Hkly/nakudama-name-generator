@@ -114,18 +114,19 @@ function generateName() {
     return generateName();
   }
 
+  // Special capitalization for repeating names
+  const isRepeat =
+    syllables.length === 4 &&
+    syllables[0] === syllables[2] &&
+    syllables[1] === syllables[3];
+
+  if (isRepeat) {
+    const half = syllables.slice(0, 2).join('');
+    return capitalize(half) + capitalize(half);
+  }
+
   return capitalize(name);
 }
-
-// --- Generate Multiple Names ---
-
-function generateNames(count = 10) {
-  const results = [];
-  for (let i = 0; i < count; i++) {
-    results.push(generateName());
-  }
-  return results;
+export function generateNames(count = 8) {
+  return Array.from({ length: count }, generateName);
 }
-
-// Example:
-console.log(generateNames(20));
