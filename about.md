@@ -19,9 +19,9 @@ A few real Japanese words and folklore concepts helped inspire the structure and
 
 Because Nakudama are frog-like people, I loved the idea that “naku” could relate to the sound of frogs calling or croaking, and I loosely interpret it in this world as:
 
-> **naku = to utter a sound, to make a voice**
+**naku = to utter a sound, to make a voice**
 
-Another big inspiration is the word **Kodama (木霊)** from Japanese folklore.
+Another big inspiration is the word **[Kodama (木霊)](<https://en.wikipedia.org/wiki/Kodama_(spirit)>)** from Japanese folklore.
 
 **Kodama** are tree spirits. The word can be broken down like this:
 
@@ -173,5 +173,5 @@ Not every Nakudama has all of these, but elders, monks, and important figures of
 
 ## Disclaimer
 
-The Nakudama, Obojima, and the Naku Naku language name are from the Obojima setting.
+The Nakudama, [Obojima](https://obojima.com/), and the Naku Naku language name are from the Obojima setting.
 This generator is a fan-made interpretation of how Nakudama names and the Naku Naku language might sound and work.
