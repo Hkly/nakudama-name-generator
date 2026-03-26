@@ -61,35 +61,35 @@ function capitalize(str) {
 
 const patternFamilies = {
   smooth: [
-    () => [S(), S()],
-    () => [S(), S(), S()],
-    () => [S(), S(), S(), S()],
+    (roots = []) => [roots[0] || S(), S()],
+    (roots = []) => [roots[0] || S(), roots[1] || S(), S()],
+    (roots = []) => [roots[0] || S(), S(), roots[1] || S(), S()],
   ],
 
   croaky: [
-    () => [C(), S(), S()],
-    () => [S(), C(), S()],
-    () => [S(), S(), C()],
-    () => [C(), C(), S()],
-    () => [C(), S(), C()],
-    () => [S(), C(), C()],
-    () => [S(), C(), S(), C()],
-    () => [C(), S(), S(), C()],
-    () => [C(), C(), S(), S()],
-    () => [S(), C(), S(), S()],
-    () => [S(), C(), C(), S()],
-    () => [S(), S(), C(), C()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || S()],
+    (roots = []) => [roots[0] || S(), C(), roots[1] || S()],
+    (roots = []) => [roots[0] || S(), roots[1] || S(), C()],
+    (roots = []) => [roots[0] || C(), C(), roots[1] || S()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || C()],
+    (roots = []) => [roots[0] || S(), C(), roots[1] || C()],
+    (roots = []) => [roots[0] || S(), C(), roots[1] || S(), C()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || S(), C()],
+    (roots = []) => [roots[0] || C(), C(), roots[1] || S(), S()],
+    (roots = []) => [roots[0] || S(), C(), roots[1] || S(), S()],
+    (roots = []) => [roots[0] || S(), C(), C(), roots[1] || S()],
+    (roots = []) => [roots[0] || S(), roots[1] || S(), C(), C()],
   ],
 
   simpleRepeating: [
-    () => {
-      let a = C();
+    (roots = []) => {
+      const a = roots[0] || C();
 
       return [a, a];
     },
-    () => {
-      let a = S();
-      let b = S();
+    (roots = []) => {
+      const a = roots[0] || S();
+      let b = roots[1] || S();
 
       while (a === b) {
         b = S();
@@ -101,43 +101,45 @@ const patternFamilies = {
 
   clusterRepeating: [
     // one cluster, one simple
-    () => {
-      let a = C();
-      let b = S();
+    (roots = []) => {
+      const a = roots[0] || C();
+      let b = roots[1] || S();
+      while (a === b) b = S();
 
       return [a, b, a, b];
     },
-    () => {
-      let a = S();
-      let b = C();
+    (roots = []) => {
+      const a = roots[0] || S();
+      let b = roots[1] || C();
+      while (a === b) b = C();
 
       return [a, b, a, b];
     },
     // both clusters
-    () => {
-      let a = C();
-      let b = C();
+    (roots = []) => {
+      const a = roots[0] || C();
+      let b = roots[1] || C();
       while (a === b) b = C();
       return [a, b, a, b];
     },
   ],
 
   ancientLong: [
-    () => [C(), S(), C(), S(), S()],
-    () => [C(), S(), C(), S(), C()],
-    () => [C(), S(), S(), C(), C()],
-    () => [C(), C(), S(), S(), S()],
-    () => [C(), S(), C(), S(), NAKU()],
-    () => [C(), S(), C(), C(), NAKU()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), S()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), C()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || S(), C(), C()],
+    (roots = []) => [roots[0] || C(), C(), roots[1] || S(), S(), S()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), NAKU()],
+    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), C(), NAKU()],
   ],
 
   nakuEnding: [
-    () => [S(), S(), NAKU()],
-    () => [C(), S(), NAKU()],
-    () => [S(), C(), NAKU()],
-    () => [C(), C(), NAKU()],
-    () => [S(), S(), S(), NAKU()],
-    () => [C(), S(), S(), NAKU()],
+    (roots = []) => [roots[0] || S(), roots[1] || S(), NAKU()],
+    (roots = []) => [roots[0] || C(), roots[1] || S(), NAKU()],
+    (roots = []) => [roots[0] || S(), roots[1] || C(), NAKU()],
+    (roots = []) => [roots[0] || C(), roots[1] || C(), NAKU()],
+    (roots = []) => [roots[0] || S(), roots[1] || S(), S(), NAKU()],
+    (roots = []) => [roots[0] || C(), roots[1] || S(), S(), NAKU()],
   ]
 };
 
@@ -194,33 +196,40 @@ function chooseFamily(mode) {
   }
 }
 
-// --- Name Generator ---
+function syllablesToName(syllables) {
+  const name = syllables.join("");
 
-function generateName(mode) {
-  const familyName = chooseFamily(mode);
-  const family = patternFamilies[familyName];
-  const pattern = rand(family);
-  let syllables = pattern();
-
-  let name = syllables.join("");
-
-  // Avoid sacred word "dama"
   if (name.includes("dama")) {
-    return generateName(mode);
+    return null;
   }
 
-  // Special capitalization for repeating names (simpleRepeating / clusterRepeating)
   const isRepeat =
     syllables.length === 4 &&
     syllables[0] === syllables[2] &&
     syllables[1] === syllables[3];
 
   if (isRepeat) {
-    const half = syllables.slice(0, 2).join('');
+    const half = syllables.slice(0, 2).join("");
     return capitalize(half) + capitalize(half);
   }
 
   return capitalize(name);
+}
+
+// --- Name Generator ---
+
+function generateName(mode) {
+  const familyName = chooseFamily(mode);
+  const family = patternFamilies[familyName];
+  const pattern = rand(family);
+  const syllables = pattern();
+  const name = syllablesToName(syllables);
+
+  if (!name) {
+    return generateName(mode);
+  }
+
+  return name;
 }
 export function generateNames(count = 8, mode = "modern") {
   const names = new Set();
@@ -252,62 +261,41 @@ function generateBase() {
   ];
 
   const pattern = rand(baseFamilies);
-  let base = pattern().join("");
+  const baseSyllables = pattern();
+  const base = baseSyllables.join("");
 
   // Avoid sacred word
   if (base.includes("dama")) {
     return generateBase();
   }
 
-  // Make sure it's a valid base (at least has content)
-  return base;
+  return {
+    base,
+    syllables: baseSyllables,
+  };
+}
+
+function buildVariantFromBase(rootSyllables, mode) {
+  const family = patternFamilies[chooseFamily(mode)];
+  const pattern = rand(family);
+  const rootA = rootSyllables[0] || S();
+  const rootB = rootSyllables[rootSyllables.length - 1] || rootA;
+  const syllables = pattern([rootA, rootB]);
+  return syllablesToName(syllables);
 }
 
 export function generateNameset() {
-  // Generate a base to work from
-  const base = generateBase();
-  const baseLower = base.toLowerCase();
+  const { syllables: rootSyllables } = generateBase();
 
-  // Child name: repeating (KoroKoro style)
-  const childName = capitalize(base + base);
+  let childName = null;
+  let everydayName = null;
+  let formalName = null;
+  let ancientName = null;
 
-  // Everyday name: base + modified syllable ending
-  const everydayEndings = [
-    () => {
-      const endings = ["bu", "ru", "mu", "nu", "gu", "du"];
-      return baseLower + rand(endings);
-    },
-    () => {
-      const s = S();
-      return baseLower + s;
-    }
-  ];
-  const everydayName = capitalize(rand(everydayEndings)());
-
-  // Formal name: base + naku
-  const formalName = capitalize(baseLower + "naku");
-
-  // Ancient name: longer, more complex recombination
-  const ancientPatterns = [
-    () => {
-      // Recombine syllables
-      const syllables = [C(), baseLower.charAt(0), baseLower.slice(1), C(), S()];
-      return syllables.join("");
-    },
-    () => {
-      const syllables = [C(), S(), baseLower, C(), S()];
-      return syllables.join("");
-    },
-    () => {
-      const syllables = [baseLower, C(), S(), S()];
-      return syllables.join("");
-    },
-    () => {
-      const syllables = [C(), C(), baseLower, S(), S()];
-      return syllables.join("");
-    }
-  ];
-  const ancientName = capitalize(rand(ancientPatterns)());
+  while (!childName) childName = buildVariantFromBase(rootSyllables, "child");
+  while (!everydayName) everydayName = buildVariantFromBase(rootSyllables, "modern");
+  while (!formalName) formalName = buildVariantFromBase(rootSyllables, "formal");
+  while (!ancientName) ancientName = buildVariantFromBase(rootSyllables, "ancient");
 
   return {
     child: childName,
