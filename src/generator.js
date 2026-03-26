@@ -269,7 +269,7 @@ export function generateNameset() {
   const baseLower = base.toLowerCase();
 
   // Child name: repeating (KoroKoro style)
-  const childName = base + base;
+  const childName = capitalize(base + base);
 
   // Everyday name: base + modified syllable ending
   const everydayEndings = [
