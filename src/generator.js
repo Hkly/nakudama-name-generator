@@ -137,6 +137,14 @@ const patternFamilies = {
 
 // --- Weights (tune these for vibe) ---
 const modes = {
+  any: {
+    smooth: 20,
+    croaky: 20,
+    simpleRepeating: 20,
+    clusterRepeating: 20,
+    nakuEnding: 20,
+    ancientLong: 20
+  },
   child: {
     smooth: 25,
     croaky: 5,

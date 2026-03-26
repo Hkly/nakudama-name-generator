@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { generateNames } from './generator.js'
 
-const MODES = ["child", "modern", "formal", "ancient"]
+const MODES = ["any", "child", "modern", "formal", "ancient"]
 
 export default function App() {
   const [names, setNames] = useState([])
-  const [mode, setMode] = useState("modern")
+  const [mode, setMode] = useState("any")
 
   return (
     <>
