@@ -1,4 +1,4 @@
-import Plausible from 'plausible-tracker'
+import Plausible from '@plausible-analytics/tracker'
 
 const plausible = Plausible({
   hashMode: true,
