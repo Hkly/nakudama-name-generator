@@ -198,7 +198,7 @@
 
   .name-card {
     background-color: var(--cream);
-    @apply border-2 rounded-xl p-3 text-center font-serif text-lg tracking-wider shadow-sm transition-all duration-150;
+    @apply border-2 rounded-lg p-3 text-center font-serif text-lg tracking-wider shadow-sm transition-all duration-150 cursor-pointer;
     border-color: var(--green-pale);
     color: var(--text-dark);
 
@@ -314,5 +314,53 @@
 
   .card-footer {
     @apply mt-7 text-center;
+  }
+
+  /* --- Nameset Display --- */
+
+  .nameset-display {
+    @apply opacity-100 transition-opacity duration-200;
+  }
+
+  .nameset-header {
+    @apply mb-6 flex items-center;
+  }
+
+  .nameset-close {
+    @apply inline-block font-serif italic text-sm no-underline transition-colors duration-150 bg-none border-none cursor-pointer p-0;
+    color: var(--green-mid);
+
+    &:hover {
+      color: var(--green-dark);
+    }
+  }
+
+  .nameset-grid {
+    @apply grid grid-cols-2 gap-6 mb-6;
+
+    @media (max-width: 480px) {
+      @apply grid-cols-1 gap-4;
+    }
+  }
+
+  .nameset-item {
+    @apply text-center p-3 rounded-xl border-2 transition-all duration-150;
+    background-color: var(--cream);
+    border-color: var(--green-pale);
+
+    &:hover {
+      border-color: var(--green-light);
+      @apply shadow-md;
+    }
+  }
+
+  .nameset-label {
+    @apply text-xs uppercase tracking-wider mb-1;
+    color: var(--text-soft);
+  }
+
+  .nameset-name {
+    @apply font-serif text-lg tracking-wider;
+    color: var(--text-dark);
   }
 }

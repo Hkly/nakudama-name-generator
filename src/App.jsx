@@ -12,9 +12,28 @@ const MODE_LABELS = {
   ancient: { label: "Ancient", desc: "Old & rumbling" },
 }
 
+// Placeholder nameset for demonstration
+const PLACEHOLDER_NAMESETS = {
+  0: { child: "KoroKoro", everyday: "Korobu", formal: "Koronaku", ancient: "Krokrobrano" },
+  1: { child: "MakoMako", everyday: "Makoru", formal: "Makoranaku", ancient: "Makograbu" },
+  2: { child: "RabuRabu", everyday: "Rabugro", formal: "Rabunaku", ancient: "Rabakronu" },
+  3: { child: "BruBru", everyday: "Brumo", formal: "Brunaku", ancient: "Brugrakro" },
+  4: { child: "GuruGuru", everyday: "Guramu", formal: "Guranaku", ancient: "Gradubranu" },
+  5: { child: "NaruNaru", everyday: "Narubra", formal: "Narunaku", ancient: "Nargrabromu" },
+  6: { child: "SoruSoru", everyday: "Soruga", formal: "Sorunaku", ancient: "Sorugakron" },
+  7: { child: "ToroToro", everyday: "Torogru", formal: "Toronaku", ancient: "Torokrabrun" },
+}
+
 export default function App() {
   const [names, setNames] = useState([])
   const [mode, setMode] = useState("any")
+  const [selectedIdx, setSelectedIdx] = useState(null)
+
+  const handleNameClick = (idx) => {
+    setSelectedIdx(selectedIdx === idx ? null : idx)
+  }
+
+  const selectedNameset = selectedIdx !== null ? PLACEHOLDER_NAMESETS[selectedIdx] : null
 
   return (
     <div className="page">
@@ -49,14 +68,40 @@ export default function App() {
           </div>
         </div>
 
-        <button className="generate-btn" onClick={() => setNames(generateNames(8, mode))}>
+        <button className="generate-btn" onClick={() => { setNames(generateNames(8, mode)); setSelectedIdx(null) }}>
           ✨ Generate Names ✨
         </button>
 
-        {names.length > 0 && (
+        {selectedNameset ? (
+          <div className="nameset-display">
+            <div className="nameset-header">
+              <button className="nameset-close" onClick={() => setSelectedIdx(null)}>← Back</button>
+            </div>
+            <div className="nameset-grid">
+              <div className="nameset-item">
+                <div className="nameset-label">Child Name</div>
+                <div className="nameset-name">{selectedNameset.child}</div>
+              </div>
+              <div className="nameset-item">
+                <div className="nameset-label">Everyday Name</div>
+                <div className="nameset-name">{selectedNameset.everyday}</div>
+              </div>
+              <div className="nameset-item">
+                <div className="nameset-label">Formal Name</div>
+                <div className="nameset-name">{selectedNameset.formal}</div>
+              </div>
+              <div className="nameset-item">
+                <div className="nameset-label">Ancient Name</div>
+                <div className="nameset-name">{selectedNameset.ancient}</div>
+              </div>
+            </div>
+          </div>
+        ) : names.length > 0 && (
           <ul className="name-grid">
             {names.map((name, i) => (
-              <li key={i} className="name-card">{name}</li>
+              <li key={i} className="name-card" onClick={() => handleNameClick(i)}>
+                {name}
+              </li>
             ))}
           </ul>
         )}
