@@ -21,8 +21,8 @@ export default function App() {
       <div className="card">
         <div className="header">
           <span className="deco">🐸</span>
-          <h1>Nakudama</h1>
-          <p className="subtitle">Name Generator for the Frog-folk</p>
+          <h1>Nakudama Names</h1>
+          <p className="subtitle">Name Generator for the Naku Naku language</p>
         </div>
 
         <div className="mode-selector">
