@@ -239,20 +239,99 @@ body {
 .about-body {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   margin-bottom: 2rem;
 
-  h2 {
+  h1, h2 {
     font-family: 'Lora', serif;
-    font-size: 1.2rem;
     color: $green-dark;
-    margin-bottom: 0.3rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-top: 0.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0.25rem;
+  }
+
+  h3 {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: $text-mid;
+    margin-top: 0.25rem;
   }
 
   p {
     color: $text-mid;
-    line-height: 1.7;
+    line-height: 1.75;
     font-size: 0.95rem;
+  }
+
+  ul, ol {
+    padding-left: 1.4rem;
+    color: $text-mid;
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  a {
+    color: $green-mid;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    &:hover { color: $green-dark; }
+  }
+
+  blockquote {
+    border-left: 3px solid $green-light;
+    margin: 0;
+    padding: 0.4rem 1rem;
+    background: $cream;
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: $text-mid;
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid $green-pale;
+    margin: 0.5rem 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th {
+      background: $green-pale;
+      color: $text-dark;
+      font-weight: 600;
+      padding: 0.4rem 0.75rem;
+      text-align: left;
+    }
+
+    td {
+      padding: 0.4rem 0.75rem;
+      color: $text-mid;
+      border-bottom: 1px solid $green-pale;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  strong {
+    color: $text-dark;
+    font-weight: 600;
+  }
+
+  em {
+    font-style: italic;
   }
 }
 
