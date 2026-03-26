@@ -99,13 +99,13 @@ const patternFamilies = {
     () => {
       let a = C();
       let b = S();
-      while (a === b) b = S();
+
       return [a, b, a, b];
     },
     () => {
       let a = S();
       let b = C();
-      while (a === b) b = C();
+
       return [a, b, a, b];
     },
     // both clusters
@@ -115,6 +115,14 @@ const patternFamilies = {
       while (a === b) b = C();
       return [a, b, a, b];
     },
+  ],
+
+  ancientLong: [
+    () => [C(), S(), C(), S(), S()],
+    () => [C(), S(), C(), S(), C()],
+    () => [C(), S(), S(), C(), C()],
+    () => [C(), C(), S(), S(), S()],
+    () => [C(), S(), C(), S(), NAKU()],
   ],
 
   nakuEnding: [
@@ -128,28 +136,54 @@ const patternFamilies = {
 };
 
 // --- Weights (tune these for vibe) ---
-const familyWeights = [
-  { name: "smooth", weight: 35 },
-  { name: "croaky", weight: 35 },
-  { name: "simpleRepeating", weight: 12 },
-  { name: "clusterRepeating", weight: 8 },
-  { name: "nakuEnding", weight: 10 }
-];
+const modes = {
+  child: {
+    smooth: 25,
+    croaky: 5,
+    simpleRepeating: 65,
+    clusterRepeating: 5,
+    nakuEnding: 0
+  },
+  modern: {
+    smooth: 30,
+    croaky: 30,
+    simpleRepeating: 25,
+    clusterRepeating: 5,
+    nakuEnding: 10
+  },
+  formal: {
+    smooth: 10,
+    croaky: 35,
+    simpleRepeating: 5,
+    clusterRepeating: 15,
+    nakuEnding: 35
+  },
+  ancient: {
+    smooth: 5,
+    croaky: 40,
+    simpleRepeating: 0,
+    clusterRepeating: 20,
+    nakuEnding: 35,
+    ancientLong: 30
+  }
+};
 
-function chooseFamily() {
-  const total = familyWeights.reduce((sum, f) => sum + f.weight, 0);
+function chooseFamily(mode) {
+  const weights = modes[mode];
+  const entries = Object.entries(weights);
+  const total = entries.reduce((sum, [, w]) => sum + w, 0);
   let r = Math.random() * total;
 
-  for (const f of familyWeights) {
-    if (r < f.weight) return f.name;
-    r -= f.weight;
+  for (const [name, weight] of entries) {
+    if (r < weight) return name;
+    r -= weight;
   }
 }
 
 // --- Name Generator ---
 
-function generateName() {
-  const familyName = chooseFamily();
+function generateName(mode) {
+  const familyName = chooseFamily(mode);
   const family = patternFamilies[familyName];
   const pattern = rand(family);
   let syllables = pattern();
@@ -158,7 +192,7 @@ function generateName() {
 
   // Avoid sacred word "dama"
   if (name.includes("dama")) {
-    return generateName();
+    return generateName(mode);
   }
 
   // Special capitalization for repeating names (simpleRepeating / clusterRepeating)
@@ -174,6 +208,6 @@ function generateName() {
 
   return capitalize(name);
 }
-export function generateNames(count = 8) {
-  return Array.from({ length: count }, generateName);
+export function generateNames(count = 8, mode = "modern") {
+  return Array.from({ length: count }, () => generateName(mode));
 }
