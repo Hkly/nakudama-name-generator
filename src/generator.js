@@ -1,12 +1,12 @@
 // --- Sound Weights (tune these to control consonant frequency) ---
 
 const soundWeights = [
-  { sound: "r", weight: 18 },
+  { sound: "r", weight: 20 },
+  { sound: "g", weight: 18 },
+  { sound: "k", weight: 15 },
+  { sound: "b", weight: 15 },
   { sound: "m", weight: 10 },
   { sound: "n", weight: 10 },
-  { sound: "k", weight: 10 },
-  { sound: "g", weight: 10 },
-  { sound: "b", weight: 10 },
   { sound: "s", weight: 10 },
   { sound: "t", weight: 10 },
   { sound: "d", weight: 4 },
