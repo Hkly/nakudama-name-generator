@@ -208,6 +208,7 @@
 
     &:hover {
       border-color: var(--green-light);
+      background-color: var(--bg);
       @apply shadow-md;
     }
   }

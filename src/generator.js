@@ -170,15 +170,15 @@ const modes = {
   formal: {
     smooth: 10,
     croaky: 35,
-    simpleRepeating: 5,
-    clusterRepeating: 15,
+    simpleRepeating: 0,
+    clusterRepeating: 0,
     nakuEnding: 35
   },
   ancient: {
     smooth: 5,
     croaky: 40,
     simpleRepeating: 0,
-    clusterRepeating: 20,
+    clusterRepeating: 0,
     nakuEnding: 35,
     ancientLong: 30
   }
