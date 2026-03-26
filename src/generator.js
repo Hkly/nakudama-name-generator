@@ -5,7 +5,7 @@ const soundWeights = [
   { sound: "g", weight: 20 },
   { sound: "k", weight: 15 },
   { sound: "b", weight: 15 },
-  { sound: "m", weight: 10 },
+  { sound: "m", weight: 15 },
   { sound: "n", weight: 10 },
   { sound: "s", weight: 7 },
   { sound: "t", weight: 7 },
@@ -254,8 +254,10 @@ function generateBase() {
 
   const pattern = rand(baseFamilies);
   const baseSyllables = pattern();
-  const [rootA, ...rest] = baseSyllables;
-  const rootB = rest[rest.length - 1] || rootA;
+  const rootA = baseSyllables[0];
+  const rootB = baseSyllables.length === 3
+    ? baseSyllables[1] + baseSyllables[2]
+    : (baseSyllables[1] || rootA);
   const base = [rootA, rootB].join("");
 
   // Avoid sacred word
