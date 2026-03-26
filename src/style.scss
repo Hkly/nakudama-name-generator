@@ -99,30 +99,40 @@ body {
 
 .mode-selector {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.6rem;
-  justify-content: center;
   margin-bottom: 1.8rem;
 
   input[type="radio"] {
     display: none;
   }
 
+  .mode-row {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+
+    &--any .mode-pill {
+      min-width: 160px;
+    }
+  }
+
   .mode-pill {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.6rem;
     border-radius: 999px;
     border: 1.5px solid $green-pale;
     background: $cream;
     cursor: pointer;
     transition: all 0.18s ease;
     min-width: 90px;
+    flex: 1;
+    max-width: 160px;
 
     @media (max-width: 480px) {
       min-width: 0;
-      flex: 1 1 calc(33% - 0.6rem);
       padding: 0.5rem 0.5rem;
     }
 
@@ -153,6 +163,7 @@ body {
       margin-top: 0.1rem;
       transition: color 0.18s;
       text-align: center;
+      white-space: nowrap;
 
       @media (max-width: 480px) {
         display: none;

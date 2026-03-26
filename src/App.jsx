@@ -25,19 +25,22 @@ export default function App() {
         </div>
 
         <div className="mode-selector">
-          {MODES.map(m => (
-            <label key={m} className={`mode-pill ${mode === m ? 'active' : ''}`}>
-              <input
-                type="radio"
-                name="mode"
-                value={m}
-                checked={mode === m}
-                onChange={() => setMode(m)}
-              />
-              <span className="mode-label">{MODE_LABELS[m].label}</span>
-              <span className="mode-desc">{MODE_LABELS[m].desc}</span>
+          <div className="mode-row mode-row--any">
+            <label className={`mode-pill ${mode === 'any' ? 'active' : ''}`}>
+              <input type="radio" name="mode" value="any" checked={mode === 'any'} onChange={() => setMode('any')} />
+              <span className="mode-label">{MODE_LABELS.any.label}</span>
+              <span className="mode-desc">{MODE_LABELS.any.desc}</span>
             </label>
-          ))}
+          </div>
+          <div className="mode-row">
+            {MODES.filter(m => m !== 'any').map(m => (
+              <label key={m} className={`mode-pill ${mode === m ? 'active' : ''}`}>
+                <input type="radio" name="mode" value={m} checked={mode === m} onChange={() => setMode(m)} />
+                <span className="mode-label">{MODE_LABELS[m].label}</span>
+                <span className="mode-desc">{MODE_LABELS[m].desc}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
         <button className="generate-btn" onClick={() => setNames(generateNames(8, mode))}>
