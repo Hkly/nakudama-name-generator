@@ -81,7 +81,7 @@ const patternFamilies = {
     () => [S(), S(), C(), C()],
   ],
 
-  repeating: [
+  simpleRepeating: [
     () => {
       let a = S();
       let b = S();
@@ -92,6 +92,29 @@ const patternFamilies = {
 
       return [a, b, a, b];
     }
+  ],
+
+  clusterRepeating: [
+    // one cluster, one simple
+    () => {
+      let a = C();
+      let b = S();
+      while (a === b) b = S();
+      return [a, b, a, b];
+    },
+    () => {
+      let a = S();
+      let b = C();
+      while (a === b) b = C();
+      return [a, b, a, b];
+    },
+    // both clusters
+    () => {
+      let a = C();
+      let b = C();
+      while (a === b) b = C();
+      return [a, b, a, b];
+    },
   ],
 
   nakuEnding: [
@@ -108,7 +131,8 @@ const patternFamilies = {
 const familyWeights = [
   { name: "smooth", weight: 35 },
   { name: "croaky", weight: 35 },
-  { name: "repeating", weight: 20 },
+  { name: "simpleRepeating", weight: 12 },
+  { name: "clusterRepeating", weight: 8 },
   { name: "nakuEnding", weight: 10 }
 ];
 
@@ -137,7 +161,7 @@ function generateName() {
     return generateName();
   }
 
-  // Special capitalization for repeating names
+  // Special capitalization for repeating names (simpleRepeating / clusterRepeating)
   const isRepeat =
     syllables.length === 4 &&
     syllables[0] === syllables[2] &&
