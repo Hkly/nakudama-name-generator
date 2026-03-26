@@ -39,10 +39,8 @@ function NamePill({ name, nameset, isExpanded, onToggle, copiedName, onCopy }) {
   return (
     <li className="name-card" onClick={onToggle}>
       <div className="name-content">
-        <div className="name-text" onClick={(e) => onCopy(e, name)}>
+        <div className="name-text">
           {name}
-          <CopyIcon size={16} />
-          {copiedName === name && <span className="copy-tooltip">Name copied!</span>}
         </div>
       </div>
     </li>
