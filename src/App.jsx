@@ -3,37 +3,56 @@ import { generateNames } from './generator.js'
 
 const MODES = ["any", "child", "modern", "formal", "ancient"]
 
+const MODE_LABELS = {
+  any:     { label: "Any",     desc: "A bit of everything" },
+  child:   { label: "Childlike", desc: "Soft & bouncy" },
+  modern:  { label: "Modern",  desc: "Balanced & easy" },
+  formal:  { label: "Formal",  desc: "Dignified & proud" },
+  ancient: { label: "Ancient", desc: "Old & rumbling" },
+}
+
 export default function App() {
   const [names, setNames] = useState([])
   const [mode, setMode] = useState("any")
 
   return (
-    <>
-      <h1>Nakudama Name Generator</h1>
-      <div className="mode-selector">
-        {MODES.map(m => (
-          <label key={m}>
-            <input
-              type="radio"
-              name="mode"
-              value={m}
-              checked={mode === m}
-              onChange={() => setMode(m)}
-            />
-            {m}
-          </label>
-        ))}
-      </div>
-      <button onClick={() => setNames(generateNames(8, mode))}>
-        Generate Names
-      </button>
-      {names.length > 0 && (
-        <ul className="name-grid">
-          {names.map((name, i) => (
-            <li key={i}>{name}</li>
+    <div className="page">
+      <div className="card">
+        <div className="header">
+          <span className="deco">🐸</span>
+          <h1>Nakudama</h1>
+          <p className="subtitle">Name Generator for the Frog-folk</p>
+        </div>
+
+        <div className="mode-selector">
+          {MODES.map(m => (
+            <label key={m} className={`mode-pill ${mode === m ? 'active' : ''}`}>
+              <input
+                type="radio"
+                name="mode"
+                value={m}
+                checked={mode === m}
+                onChange={() => setMode(m)}
+              />
+              <span className="mode-label">{MODE_LABELS[m].label}</span>
+              <span className="mode-desc">{MODE_LABELS[m].desc}</span>
+            </label>
           ))}
-        </ul>
-      )}
-    </>
+        </div>
+
+        <button className="generate-btn" onClick={() => setNames(generateNames(8, mode))}>
+          ✨ Generate Names
+        </button>
+
+        {names.length > 0 && (
+          <ul className="name-grid">
+            {names.map((name, i) => (
+              <li key={i} className="name-card">{name}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   )
 }
+

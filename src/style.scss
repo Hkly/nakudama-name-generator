@@ -1,3 +1,18 @@
+// --- Ghibli-inspired palette ---
+$bg:          #dde8d0;
+$bg-texture:  #cfdfc0;
+$card-bg:     #f4f7ee;
+$green-dark:  #3d6b45;
+$green-mid:   #5a8f65;
+$green-light: #8dba90;
+$green-pale:  #c8dfc2;
+$cream:       #faf7f0;
+$text-dark:   #2e3d28;
+$text-mid:    #4a5e40;
+$text-soft:   #7a9170;
+$warm-accent: #c4875a;
+$warm-light:  #e8c9a8;
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,46 +20,206 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'Nunito', sans-serif;
+  background-color: $bg;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(#a8c890, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(#7aab6a, 0.25) 0%, transparent 55%);
+  min-height: 100vh;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  padding: 2rem;
+  padding: 2rem 1rem;
+
+  @media (max-width: 480px) {
+    padding: 1rem 0.75rem;
+  }
 }
 
-#app {
-  max-width: 800px;
+.page {
   width: 100%;
+  max-width: 680px;
+}
+
+.card {
+  background: $card-bg;
+  border-radius: 2rem;
+  padding: 2.5rem 2.5rem 3rem;
+  box-shadow:
+    0 4px 24px rgba($green-dark, 0.12),
+    0 1px 4px rgba($green-dark, 0.08);
+  border: 1.5px solid rgba($green-light, 0.5);
+
+  @media (max-width: 480px) {
+    padding: 1.75rem 1.25rem 2rem;
+    border-radius: 1.5rem;
+  }
+}
+
+// --- Header ---
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .deco {
+    font-size: 2.8rem;
+    display: block;
+    margin-bottom: 0.3rem;
+    filter: drop-shadow(0 2px 4px rgba($green-dark, 0.2));
+  }
 
   h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
+    font-family: 'Lora', serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    color: $green-dark;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
 
-  button {
-    font-size: 1rem;
-    padding: 0.5rem 1.5rem;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-  }
-
-  .mode-selector {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-
-    label {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      text-transform: capitalize;
+    @media (max-width: 480px) {
+      font-size: 2rem;
     }
   }
 
-  .name-grid {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+  .subtitle {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: $text-soft;
+    font-size: 1rem;
+    margin-top: 0.4rem;
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
   }
 }
+
+// --- Mode selector ---
+
+.mode-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-bottom: 1.8rem;
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  .mode-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1.5px solid $green-pale;
+    background: $cream;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    min-width: 90px;
+
+    @media (max-width: 480px) {
+      min-width: 0;
+      flex: 1 1 calc(33% - 0.6rem);
+      padding: 0.5rem 0.5rem;
+    }
+
+    &:hover {
+      border-color: $green-mid;
+      background: lighten($green-pale, 6%);
+    }
+
+    &.active {
+      background: $green-dark;
+      border-color: $green-dark;
+      box-shadow: 0 2px 8px rgba($green-dark, 0.25);
+
+      .mode-label { color: #fff; }
+      .mode-desc  { color: rgba(#fff, 0.7); }
+    }
+
+    .mode-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: $text-dark;
+      transition: color 0.18s;
+    }
+
+    .mode-desc {
+      font-size: 0.72rem;
+      color: $text-soft;
+      margin-top: 0.1rem;
+      transition: color 0.18s;
+      text-align: center;
+
+      @media (max-width: 480px) {
+        display: none;
+      }
+    }
+  }
+}
+
+// --- Button ---
+
+.generate-btn {
+  display: block;
+  width: 100%;
+  font-family: 'Lora', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  background: $green-dark;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  box-shadow: 0 3px 12px rgba($green-dark, 0.3);
+  transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+  margin-bottom: 2rem;
+
+  &:hover {
+    background: $green-mid;
+    box-shadow: 0 5px 16px rgba($green-dark, 0.35);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 6px rgba($green-dark, 0.2);
+  }
+}
+
+// --- Name grid ---
+
+.name-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+
+  @media (max-width: 360px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.name-card {
+  background: $cream;
+  border: 1.5px solid $green-pale;
+  border-radius: 1rem;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  font-family: 'Lora', serif;
+  font-size: 1.15rem;
+  color: $text-dark;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 4px rgba($green-dark, 0.07);
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: $green-light;
+    box-shadow: 0 3px 10px rgba($green-dark, 0.12);
+  }
+}
+
