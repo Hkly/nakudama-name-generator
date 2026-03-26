@@ -1,4 +1,11 @@
-// --- Ghibli-inspired palette (CSS custom properties) ---
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Lora", serif;
+  --font-sans: "Nunito", sans-serif;
+}
+
+/* Ghibli-inspired palette (CSS custom properties) */
 :root {
   --bg:          #dde8d0;
   --card-bg:     #f4f7ee;
@@ -11,7 +18,6 @@
   --text-mid:    #4a5e40;
   --text-soft:   #7a9170;
 
-  // gradient blob colors
   --blob-a: rgba(168, 200, 144, 0.4);
   --blob-b: rgba(122, 171, 106, 0.25);
 }
@@ -34,352 +40,279 @@
   }
 }
 
-// SCSS aliases for use in complex expressions (lighten, rgba, etc.)
-$green-dark:  #3d6b45;
-$green-mid:   #5a8f65;
-$green-light: #8dba90;
-$green-pale:  #c8dfc2;
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Nunito', sans-serif;
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(ellipse at 20% 20%, var(--blob-a) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, var(--blob-b) 0%, transparent 55%);
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 2rem 1rem;
+@layer base {
+  body {
+    @apply min-h-screen flex items-start justify-center;
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 20% 20%, var(--blob-a) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, var(--blob-b) 0%, transparent 55%);
+    padding: 2rem 1rem;
+  }
 
   @media (max-width: 480px) {
-    padding: 1rem 0.75rem;
+    body {
+      padding: 1rem 0.75rem;
+    }
   }
 }
 
-.page {
-  width: 100%;
-  max-width: 780px;
-}
 
-.card {
-  background: var(--card-bg);
-  border-radius: 2rem;
-  padding: 2.5rem 2.5rem 3rem;
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.15),
-    0 1px 4px rgba(0, 0, 0, 0.08);
-  border: 1.5px solid var(--green-pale);
-
-  @media (max-width: 480px) {
-    padding: 1.75rem 1.25rem 2rem;
-    border-radius: 1.5rem;
-  }
-}
-
-// --- Header ---
-
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
-
-  .deco {
-    font-size: 2.8rem;
-    display: block;
-    margin-bottom: 0.3rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+@layer components {
+  .page {
+    @apply w-full max-w-3xl;
   }
 
-  h1 {
-    font-family: 'Lora', serif;
-    font-size: 2.6rem;
-    font-weight: 600;
-    color: var(--green-dark);
-    letter-spacing: 0.03em;
-    line-height: 1.1;
+  .card {
+    background-color: var(--card-bg);
+    @apply rounded-3xl p-10 shadow-lg border-2;
+    border-color: var(--green-pale);
 
     @media (max-width: 480px) {
-      font-size: 2rem;
+      @apply rounded-2xl p-7;
     }
   }
 
-  .subtitle {
-    font-family: 'Lora', serif;
-    font-style: italic;
-    color: var(--text-soft);
-    font-size: 1rem;
-    margin: 0 5rem;
-    margin-top: 0.4rem;
+  /* --- Header --- */
 
-    @media (max-width: 480px) {
-      font-size: 0.9rem;
-      margin: 0.4rem 0;
-    }
-  }
-}
+  .header {
+    @apply text-center mb-8;
 
-// --- Mode selector ---
-
-.mode-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 1.8rem;
-
-  input[type="radio"] {
-    display: none;
-  }
-
-  .mode-row {
-    display: flex;
-    gap: 0.6rem;
-    justify-content: center;
-
-    &--any .mode-pill {
-      min-width: 160px;
-    }
-  }
-
-  .mode-pill {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    border-radius: 999px;
-    border: 1.5px solid var(--green-pale);
-    background: var(--cream);
-    cursor: pointer;
-    transition: all 0.18s ease;
-    min-width: 90px;
-    flex: 1;
-    max-width: 160px;
-
-    @media (max-width: 480px) {
-      min-width: 0;
-      padding: 0.5rem 0.5rem;
+    .deco {
+      @apply block mb-1 text-5xl drop-shadow;
     }
 
-    &:hover {
-      border-color: var(--green-mid);
-      background: var(--green-pale);
-    }
-
-    &.active {
-      background: var(--green-dark);
-      border-color: var(--green-dark);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-
-      .mode-label { color: #fff; }
-      .mode-desc  { color: rgba(#fff, 0.7); }
-    }
-
-    .mode-label {
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-dark);
-      transition: color 0.18s;
-    }
-
-    .mode-desc {
-      font-size: 0.72rem;
-      color: var(--text-soft);
-      margin-top: 0.1rem;
-      transition: color 0.18s;
-      text-align: center;
-      white-space: nowrap;
+    h1 {
+      @apply font-serif font-semibold tracking-wider leading-tight;
+      color: var(--green-dark);
+      font-size: 2.6rem;
 
       @media (max-width: 480px) {
-        display: none;
+        @apply text-4xl;
+      }
+    }
+
+    .subtitle {
+      @apply font-serif italic;
+      color: var(--text-soft);
+      @apply text-base mx-20 mt-1;
+
+      @media (max-width: 480px) {
+        @apply text-sm mx-0 mt-1;
       }
     }
   }
-}
 
-// --- Button ---
+  /* --- Mode selector --- */
 
-.generate-btn {
-  display: block;
-  width: 100%;
-  font-family: 'Lora', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 999px;
-  background: var(--green-dark);
-  color: #fff;
-  cursor: pointer;
-  letter-spacing: 0.04em;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-  transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
-  margin-bottom: 2rem;
+  .mode-selector {
+    @apply flex flex-col gap-1.5 mb-7;
 
-  &:hover {
-    background: var(--green-mid);
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.25);
-  }
-
-  &:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  }
-}
-
-// --- Name grid ---
-
-.name-grid {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-
-  @media (max-width: 360px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.name-card {
-  background: var(--cream);
-  border: 1.5px solid var(--green-pale);
-  border-radius: 1rem;
-  padding: 0.7rem 1rem;
-  text-align: center;
-  font-family: 'Lora', serif;
-  font-size: 1.15rem;
-  color: var(--text-dark);
-  letter-spacing: 0.02em;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
-  transition: border-color 0.15s, box-shadow 0.15s;
-
-  &:hover {
-    border-color: var(--green-light);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-  }
-}
-
-// --- About page ---
-
-.about-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-
-  h1, h2 {
-    font-family: 'Lora', serif;
-    color: var(--green-dark);
-  }
-
-  h1 {
-    font-size: 1.6rem;
-    margin-top: 0.5rem;
-  }
-
-  h2 {
-    font-size: 1.2rem;
-    margin-top: 0.25rem;
-  }
-
-  h3 {
-    font-family: 'Lora', serif;
-    font-size: 1rem;
-    color: var(--text-mid);
-    margin-top: 0.25rem;
-  }
-
-  p {
-    color: var(--text-mid);
-    line-height: 1.75;
-    font-size: 0.95rem;
-  }
-
-  ul, ol {
-    padding-left: 1.4rem;
-    color: var(--text-mid);
-    font-size: 0.95rem;
-    line-height: 1.75;
-  }
-
-  a {
-    color: var(--green-mid);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    &:hover { color: var(--green-dark); }
-  }
-
-  blockquote {
-    border-left: 3px solid var(--green-light);
-    margin: 0;
-    padding: 0.4rem 1rem;
-    background: var(--cream);
-    border-radius: 0 0.5rem 0.5rem 0;
-    color: var(--text-mid);
-    font-style: italic;
-    font-size: 0.95rem;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid var(--green-pale);
-    margin: 0.5rem 0;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-
-    th {
-      background: var(--green-pale);
-      color: var(--text-dark);
-      font-weight: 600;
-      padding: 0.4rem 0.75rem;
-      text-align: left;
+    input[type="radio"] {
+      @apply hidden;
     }
 
-    td {
-      padding: 0.4rem 0.75rem;
-      color: var(--text-mid);
-      border-bottom: 1px solid var(--green-pale);
+    .mode-row {
+      @apply flex gap-1.5 justify-center;
+
+      &--any .mode-pill {
+        @apply min-w-40;
+      }
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    .mode-pill {
+      @apply flex flex-col items-center px-4 py-2 rounded-full border-2 cursor-pointer transition-all duration-180 flex-1 max-w-40;
+      background-color: var(--cream);
+      border-color: var(--green-pale);
+
+      @media (max-width: 480px) {
+        @apply min-w-0 px-2 py-2;
+      }
+
+      &:hover {
+        border-color: var(--green-mid);
+        background-color: var(--green-pale);
+      }
+
+      &.active {
+        background-color: var(--green-dark);
+        border-color: var(--green-dark);
+        @apply shadow-md;
+
+        .mode-label {
+          @apply text-white;
+        }
+
+        .mode-desc {
+          @apply text-white/70;
+        }
+      }
+
+      .mode-label {
+        @apply font-semibold text-sm transition-colors duration-180;
+        color: var(--text-dark);
+      }
+
+      .mode-desc {
+        @apply text-xs mt-0.5 text-center whitespace-nowrap transition-colors duration-180;
+        color: var(--text-soft);
+
+        @media (max-width: 480px) {
+          @apply hidden;
+        }
+      }
     }
   }
 
-  strong {
+  /* --- Button --- */
+
+  .generate-btn {
+    @apply block w-full font-serif text-xl font-semibold py-3 px-6 rounded-full border-none cursor-pointer tracking-wider mb-8;
+    background-color: var(--green-dark);
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+    transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+
+    &:hover {
+      background-color: var(--green-mid);
+      box-shadow: 0 5px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    &:active {
+      @apply translate-y-0.5;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  /* --- Name grid --- */
+
+  .name-grid {
+    @apply list-none grid gap-3;
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 360px) {
+      @apply grid-cols-1;
+    }
+  }
+
+  .name-card {
+    background-color: var(--cream);
+    @apply border-2 rounded-lg p-3 text-center font-serif text-lg tracking-wider shadow-sm transition-all duration-150;
+    border-color: var(--green-pale);
     color: var(--text-dark);
-    font-weight: 600;
+
+    &:hover {
+      border-color: var(--green-light);
+      @apply shadow-md;
+    }
   }
 
-  em {
-    font-style: italic;
+  /* --- About page --- */
+
+  .about-body {
+    @apply flex flex-col gap-4 mb-8;
+
+    h1, h2 {
+      @apply font-serif;
+      color: var(--green-dark);
+    }
+
+    h1 {
+      @apply text-2xl mt-2;
+    }
+
+    h2 {
+      @apply text-xl;
+    }
+
+    h3 {
+      @apply font-serif text-base mt-1;
+      color: var(--text-mid);
+    }
+
+    p {
+      @apply leading-7 text-[0.95rem];
+      color: var(--text-mid);
+    }
+
+    ul, ol {
+      @apply pl-6 text-sm leading-7;
+      color: var(--text-mid);
+      list-style: inherit;
+    }
+
+    li {
+      color: var(--text-mid);
+    }
+
+    a {
+      @apply underline underline-offset-1 duration-150;
+      color: var(--green-mid);
+
+      &:hover {
+        color: var(--green-dark);
+      }
+    }
+
+    blockquote {
+      border-left: 3px solid var(--green-light);
+      @apply my-4 pl-4 italic text-sm;
+      background-color: var(--cream);
+      color: var(--text-mid);
+
+      @media (prefers-color-scheme: dark) {
+        background-color: var(--card-bg);
+      }
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--green-pale);
+      @apply my-2;
+    }
+
+    table {
+      @apply w-full border-collapse text-sm;
+
+      th {
+        background-color: var(--green-pale);
+        @apply px-3 py-1 text-left font-semibold;
+        color: var(--text-dark);
+      }
+
+      td {
+        @apply px-3 py-1 border-b;
+        color: var(--text-mid);
+        border-color: var(--green-pale);
+      }
+
+      tr:last-child td {
+        @apply border-b-0;
+      }
+    }
+
+    strong {
+      @apply font-semibold;
+      color: var(--text-dark);
+    }
+
+    em {
+      @apply italic;
+    }
   }
-}
 
-.back-link,
-.about-link {
-  display: inline-block;
-  font-family: 'Lora', serif;
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--green-mid);
-  text-decoration: none;
-  transition: color 0.15s;
+  .back-link,
+  .about-link {
+    @apply inline-block font-serif italic text-sm no-underline transition-colors duration-150;
+    color: var(--green-mid);
 
-  &:hover {
-    color: var(--green-dark);
+    &:hover {
+      color: var(--green-dark);
+    }
   }
-}
 
-.card-footer {
-  margin-top: 1.75rem;
-  text-align: center;
+  .card-footer {
+    @apply mt-7 text-center;
+  }
 }
