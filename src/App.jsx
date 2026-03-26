@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { generateNames } from './generator.js'
+import { generateNamesets } from './generator.js'
 
 const CopyIcon = ({ size }) => (
   <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -59,20 +59,17 @@ const MODE_LABELS = {
   ancient: { label: "Ancient", desc: "Old & rumbling" },
 }
 
-// Placeholder nameset for demonstration
-const PLACEHOLDER_NAMESETS = {
-  0: { child: "KoroKoro", everyday: "Korobu", formal: "Koronaku", ancient: "Krokrobrano" },
-  1: { child: "MakoMako", everyday: "Makoru", formal: "Makoranaku", ancient: "Makograbu" },
-  2: { child: "RabuRabu", everyday: "Rabugro", formal: "Rabunaku", ancient: "Rabakronu" },
-  3: { child: "BruBru", everyday: "Brumo", formal: "Brunaku", ancient: "Brugrakro" },
-  4: { child: "GuruGuru", everyday: "Guramu", formal: "Guranaku", ancient: "Gradubranu" },
-  5: { child: "NaruNaru", everyday: "Narubra", formal: "Narunaku", ancient: "Nargrabromu" },
-  6: { child: "SoruSoru", everyday: "Soruga", formal: "Sorunaku", ancient: "Sorugakron" },
-  7: { child: "ToroToro", everyday: "Torogru", formal: "Toronaku", ancient: "Torokrabrun" },
+function getModeDisplayField(mode) {
+  if (mode === "child") return "child";
+  if (mode === "formal") return "formal";
+  if (mode === "ancient") return "ancient";
+  if (mode === "modern") return "everyday";
+  // "any" mode: we'll need to pick one per nameset
+  return null;
 }
 
 export default function App() {
-  const [names, setNames] = useState([])
+  const [namesets, setNamesets] = useState([])
   const [mode, setMode] = useState("any")
   const [selectedIdx, setSelectedIdx] = useState(null)
   const [copiedName, setCopiedName] = useState(null)
@@ -88,13 +85,22 @@ export default function App() {
     setTimeout(() => setCopiedName(null), 1500)
   }
 
-  const selectedNameset = selectedIdx !== null ? PLACEHOLDER_NAMESETS[selectedIdx] : null
+  const selectedNameset = selectedIdx !== null ? namesets[selectedIdx] : null
+
+  const getDisplayName = (nameset) => {
+    const displayField = getModeDisplayField(mode);
+    if (displayField) {
+      return nameset[displayField];
+    }
+    // "any" mode: use the pre-selected field stored in the nameset
+    return nameset[nameset.anyModeField];
+  }
 
   const renderColumn = (parity) =>
-    names.map((name, i) => i % 2 === parity ? (
+    namesets.map((nameset, i) => i % 2 === parity ? (
       <NamePill
         key={i}
-        name={name}
+        name={getDisplayName(nameset)}
         nameset={selectedIdx === i ? selectedNameset : null}
         isExpanded={selectedIdx === i}
         onToggle={() => handleNameClick(i)}
@@ -136,11 +142,11 @@ export default function App() {
           </div>
         </div>
 
-        <button className="generate-btn" onClick={() => { setNames(generateNames(8, mode)); setSelectedIdx(null) }}>
+        <button className="generate-btn" onClick={() => { setNamesets(generateNamesets(8)); setSelectedIdx(null) }}>
           ✨ Generate Names ✨
         </button>
 
-        {names.length > 0 && (
+        {namesets.length > 0 && (
           <div className="name-grid-wrapper">
             <div className="name-column">{renderColumn(0)}</div>
             <div className="name-column">{renderColumn(1)}</div>

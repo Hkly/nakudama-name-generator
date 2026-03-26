@@ -229,3 +229,109 @@ export function generateNames(count = 8, mode = "modern") {
   }
   return [...names];
 }
+
+function generateBase() {
+  // Generate 2-3 syllables as a base
+  const baseFamilies = [
+    () => {
+      let a = C();
+      let b = S();
+      return [a, b];
+    },
+    () => {
+      let a = S();
+      let b = S();
+      return [a, b];
+    },
+    () => {
+      let a = C();
+      let b = S();
+      let c = S();
+      return [a, b, c];
+    },
+  ];
+
+  const pattern = rand(baseFamilies);
+  let base = pattern().join("");
+
+  // Avoid sacred word
+  if (base.includes("dama")) {
+    return generateBase();
+  }
+
+  // Make sure it's a valid base (at least has content)
+  return base;
+}
+
+export function generateNameset() {
+  // Generate a base to work from
+  const base = generateBase();
+  const baseLower = base.toLowerCase();
+
+  // Child name: repeating (KoroKoro style)
+  const childName = base + base;
+
+  // Everyday name: base + modified syllable ending
+  const everydayEndings = [
+    () => {
+      const endings = ["bu", "ru", "mu", "nu", "gu", "du"];
+      return baseLower + rand(endings);
+    },
+    () => {
+      const s = S();
+      return baseLower + s;
+    }
+  ];
+  const everydayName = capitalize(rand(everydayEndings)());
+
+  // Formal name: base + naku
+  const formalName = capitalize(baseLower + "naku");
+
+  // Ancient name: longer, more complex recombination
+  const ancientPatterns = [
+    () => {
+      // Recombine syllables
+      const syllables = [C(), baseLower.charAt(0), baseLower.slice(1), C(), S()];
+      return syllables.join("");
+    },
+    () => {
+      const syllables = [C(), S(), baseLower, C(), S()];
+      return syllables.join("");
+    },
+    () => {
+      const syllables = [baseLower, C(), S(), S()];
+      return syllables.join("");
+    },
+    () => {
+      const syllables = [C(), C(), baseLower, S(), S()];
+      return syllables.join("");
+    }
+  ];
+  const ancientName = capitalize(rand(ancientPatterns)());
+
+  return {
+    child: childName,
+    everyday: everydayName,
+    formal: formalName,
+    ancient: ancientName,
+    // Store which field to display for "any" mode - chosen once per nameset
+    anyModeField: rand(["child", "everyday", "formal", "ancient"])
+  };
+}
+
+
+export function generateNamesets(count = 8) {
+  const sets = [];
+  const seenChild = new Set();
+
+  while (sets.length < count) {
+    const nameset = generateNameset();
+    // Avoid duplicates based on child name
+    if (!seenChild.has(nameset.child)) {
+      seenChild.add(nameset.child);
+      sets.push(nameset);
+    }
+  }
+
+  return sets;
+}
