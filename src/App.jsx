@@ -21,8 +21,12 @@ export default function App() {
       <div className="card">
         <div className="header">
           <span className="deco">🐸</span>
-          <h1>Nakudama Names</h1>
-          <p className="subtitle">Name Generator for the Naku Naku language</p>
+          <h1>Nakudama</h1>
+          <p className="subtitle">
+            Built from soft syllables and croaky consonant clusters, Nakudama names are meant to sound a bit like frogs calling across the marsh.
+            <br />
+            <Link to="/about" className="about-link">Read more about the Naku Naku names!</Link>
+          </p>
         </div>
 
         <div className="mode-selector">
