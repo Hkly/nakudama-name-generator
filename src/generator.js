@@ -1,14 +1,14 @@
 // --- Sound Weights (tune these to control consonant frequency) ---
 
 const soundWeights = [
-  { sound: "r", weight: 20 },
-  { sound: "g", weight: 18 },
+  { sound: "r", weight: 30 },
+  { sound: "g", weight: 20 },
   { sound: "k", weight: 15 },
   { sound: "b", weight: 15 },
   { sound: "m", weight: 10 },
   { sound: "n", weight: 10 },
-  { sound: "s", weight: 10 },
-  { sound: "t", weight: 10 },
+  { sound: "s", weight: 7 },
+  { sound: "t", weight: 7 },
   { sound: "d", weight: 4 },
 ];
 
@@ -128,6 +128,7 @@ const patternFamilies = {
     () => [C(), S(), S(), C(), C()],
     () => [C(), C(), S(), S(), S()],
     () => [C(), S(), C(), S(), NAKU()],
+    () => [C(), S(), C(), C(), NAKU()],
   ],
 
   nakuEnding: [
@@ -154,7 +155,7 @@ const modes = {
     smooth: 25,
     croaky: 5,
     simpleRepeating: 65,
-    clusterRepeating: 5,
+    clusterRepeating: 15,
     nakuEnding: 0
   },
   modern: {
