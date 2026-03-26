@@ -45,7 +45,7 @@ export default function App() {
         </div>
 
         <button className="generate-btn" onClick={() => setNames(generateNames(8, mode))}>
-          ✨ Generate Names
+          ✨ Generate Names ✨
         </button>
 
         {names.length > 0 && (
