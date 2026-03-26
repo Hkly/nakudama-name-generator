@@ -187,13 +187,17 @@
 
   /* --- Name grid --- */
 
-  .name-grid {
-    @apply list-none grid gap-3;
+  .name-grid-wrapper {
+    @apply grid gap-3;
     grid-template-columns: 1fr 1fr;
 
     @media (max-width: 360px) {
       @apply grid-cols-1;
     }
+  }
+
+  .name-column {
+    @apply flex flex-col gap-3 list-none;
   }
 
   .name-card {
@@ -316,35 +320,10 @@
     @apply mt-7 text-center;
   }
 
-  /* --- Nameset Display --- */
+  /* --- Expanded Name Pill --- */
 
-  .nameset-display {
-    @apply opacity-100 transition-opacity duration-200;
-  }
-
-  .nameset-header {
-    @apply mb-6 flex items-center;
-  }
-
-  .nameset-close {
-    @apply inline-block font-serif italic text-sm no-underline transition-colors duration-150 bg-none border-none cursor-pointer p-0;
-    color: var(--green-mid);
-
-    &:hover {
-      color: var(--green-dark);
-    }
-  }
-
-  .nameset-grid {
-    @apply grid grid-cols-2 gap-6 mb-6;
-
-    @media (max-width: 480px) {
-      @apply grid-cols-1 gap-4;
-    }
-  }
-
-  .nameset-item {
-    @apply text-center p-3 rounded-xl border-2 transition-all duration-150;
+  .expanded-name-pill {
+    @apply rounded-lg border-2 p-4 transition-all duration-200 cursor-pointer;
     background-color: var(--cream);
     border-color: var(--green-pale);
 
@@ -354,12 +333,20 @@
     }
   }
 
-  .nameset-label {
-    @apply text-xs uppercase tracking-wider mb-1;
+  .expanded-names {
+    @apply flex flex-col gap-2;
+  }
+
+  .expanded-name-item {
+    @apply text-center py-1;
+  }
+
+  .expanded-name-type {
+    @apply text-[0.6rem] uppercase tracking-wider;
     color: var(--text-soft);
   }
 
-  .nameset-name {
+  .expanded-name-value {
     @apply font-serif text-lg tracking-wider;
     color: var(--text-dark);
   }

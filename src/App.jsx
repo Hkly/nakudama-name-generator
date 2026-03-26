@@ -72,38 +72,69 @@ export default function App() {
           ✨ Generate Names ✨
         </button>
 
-        {selectedNameset ? (
-          <div className="nameset-display">
-            <div className="nameset-header">
-              <button className="nameset-close" onClick={() => setSelectedIdx(null)}>← Back</button>
+        {names.length > 0 && (
+          <div className="name-grid-wrapper">
+            <div className="name-column">
+              {names.map((name, i) => (i % 2 === 0 ? (
+                selectedIdx === i ? (
+                  <li key={i} className="expanded-name-pill" onClick={() => handleNameClick(i)}>
+                    <div className="expanded-names">
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Child Name</div>
+                        <div className="expanded-name-value">{selectedNameset.child}</div>
+                      </div>
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Everyday Name</div>
+                        <div className="expanded-name-value">{selectedNameset.everyday}</div>
+                      </div>
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Formal Name</div>
+                        <div className="expanded-name-value">{selectedNameset.formal}</div>
+                      </div>
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Ancient Name</div>
+                        <div className="expanded-name-value">{selectedNameset.ancient}</div>
+                      </div>
+                    </div>
+                  </li>
+                ) : (
+                  <li key={i} className="name-card" onClick={() => handleNameClick(i)}>
+                    {name}
+                  </li>
+                )
+              ) : null))}
             </div>
-            <div className="nameset-grid">
-              <div className="nameset-item">
-                <div className="nameset-label">Child Name</div>
-                <div className="nameset-name">{selectedNameset.child}</div>
-              </div>
-              <div className="nameset-item">
-                <div className="nameset-label">Everyday Name</div>
-                <div className="nameset-name">{selectedNameset.everyday}</div>
-              </div>
-              <div className="nameset-item">
-                <div className="nameset-label">Formal Name</div>
-                <div className="nameset-name">{selectedNameset.formal}</div>
-              </div>
-              <div className="nameset-item">
-                <div className="nameset-label">Ancient Name</div>
-                <div className="nameset-name">{selectedNameset.ancient}</div>
-              </div>
+            <div className="name-column">
+              {names.map((name, i) => (i % 2 === 1 ? (
+                selectedIdx === i ? (
+                  <li key={i} className="expanded-name-pill" onClick={() => handleNameClick(i)}>
+                    <div className="expanded-names">
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Child Name</div>
+                        <div className="expanded-name-value">{selectedNameset.child}</div>
+                      </div>
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Everyday Name</div>
+                        <div className="expanded-name-value">{selectedNameset.everyday}</div>
+                      </div>
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Formal Name</div>
+                        <div className="expanded-name-value">{selectedNameset.formal}</div>
+                      </div>
+                      <div className="expanded-name-item">
+                        <div className="expanded-name-type">Ancient Name</div>
+                        <div className="expanded-name-value">{selectedNameset.ancient}</div>
+                      </div>
+                    </div>
+                  </li>
+                ) : (
+                  <li key={i} className="name-card" onClick={() => handleNameClick(i)}>
+                    {name}
+                  </li>
+                )
+              ) : null))}
             </div>
           </div>
-        ) : names.length > 0 && (
-          <ul className="name-grid">
-            {names.map((name, i) => (
-              <li key={i} className="name-card" onClick={() => handleNameClick(i)}>
-                {name}
-              </li>
-            ))}
-          </ul>
         )}
 
         <div className="card-footer">
