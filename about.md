@@ -1,6 +1,6 @@
 # About the Nakudama Name Generator & the Naku Naku Language
 
-This name generator was created because I was having trouble coming up with a name for my Nakudama monk character. The language of the Nakudama is called Naku Naku.
+This name generator was created because I was having trouble coming up with a name for my Nakudama monk character and I couldn't find more info on Naku Naku, the language of the Nakudama.
 
 This project is my personal interpretation of what the Naku Naku language might sound like, how names might be structured, and how different types of names (child names, everyday names, formal names, and ancient names) might work within Nakudama culture.
 
