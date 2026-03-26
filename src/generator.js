@@ -1,16 +1,20 @@
+// --- Sound Weights (tune these to control consonant frequency) ---
+
+const soundWeights = [
+  { sound: "r", weight: 18 },
+  { sound: "m", weight: 10 },
+  { sound: "n", weight: 10 },
+  { sound: "k", weight: 10 },
+  { sound: "g", weight: 10 },
+  { sound: "b", weight: 10 },
+  { sound: "s", weight: 10 },
+  { sound: "t", weight: 10 },
+  { sound: "d", weight: 4 },
+];
+
 // --- Syllable Pools ---
 
-const simpleSyllables = [
-  "ma","mo","mu",
-  "na","no","nu",
-  "ra","ro","ru",
-  "ka","ko","ku",
-  "ga","go","gu",
-  "ba","bo","bu",
-  "sa","so","su",
-  "ta","to","tu",
-  "da","do","du" // testing D sounds
-];
+const vowels = ["a", "o", "u"];
 
 const clusterSyllables = [
   "kra","kro","kru",
@@ -27,8 +31,17 @@ function rand(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function weightedSound() {
+  const total = soundWeights.reduce((sum, s) => sum + s.weight, 0);
+  let r = Math.random() * total;
+  for (const s of soundWeights) {
+    if (r < s.weight) return s.sound;
+    r -= s.weight;
+  }
+}
+
 function S() {
-  return rand(simpleSyllables);
+  return weightedSound() + rand(vowels);
 }
 
 function C() {
