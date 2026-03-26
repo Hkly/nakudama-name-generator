@@ -222,5 +222,9 @@ function generateName(mode) {
   return capitalize(name);
 }
 export function generateNames(count = 8, mode = "modern") {
-  return Array.from({ length: count }, () => generateName(mode));
+  const names = new Set();
+  while (names.size < count) {
+    names.add(generateName(mode));
+  }
+  return [...names];
 }
