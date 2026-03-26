@@ -1,8 +1,6 @@
-import Plausible from '@plausible-analytics/tracker'
+import { init } from '@plausible-analytics/tracker'
 
-const plausible = Plausible({
+init({
+  domain: 'hkly.io/nakudama-name-generator',
   hashBasedRouting: true,
-  domain: 'hkly.io/nakudama-name-generator'
 })
-
-export default plausible

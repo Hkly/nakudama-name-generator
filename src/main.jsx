@@ -4,9 +4,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import './style.scss'
 import App from './App.jsx'
 import About from './About.jsx'
-import plausible from './analytics.js'
-
-const { cleanup } = plausible.enableAutoPageviews()
+import './analytics.js'
 
 createRoot(document.getElementById('app')).render(
   <StrictMode>
