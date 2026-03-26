@@ -71,6 +71,22 @@ So the **Naku Naku language** is literally:
 
 > _“the language of sounds”_ or _“the language of voices.”_
 
+
+---
+
+# In-Universe Naming Idea
+
+In Nakudama culture, a person might have multiple names:
+
+| Name Type     | Example     | Meaning                       |
+| ------------- | ----------- | ----------------------------- |
+| Child Name    | KoroKoro    | a cute or family name         |
+| Everyday Name | Korobu      | the name most people use      |
+| Formal Name   | Koronaku    | used in temples or ceremonies |
+| Ancient Name  | Krokrobrano | a lineage or old name         |
+
+Not every Nakudama has all of these, but elders, monks, and important figures often have formal or ancient names.
+
 ---
 
 # Structure of Nakudama Names
@@ -154,20 +170,6 @@ Examples:
 
 These names are meant to feel older and more ceremonial, like names from legends or old temple records.
 
----
-
-# In-Universe Naming Idea
-
-In Nakudama culture, a person might have multiple names:
-
-| Name Type     | Example     | Meaning                       |
-| ------------- | ----------- | ----------------------------- |
-| Child Name    | KoroKoro    | a cute or family name         |
-| Everyday Name | Korobu      | the name most people use      |
-| Formal Name   | Koronaku    | used in temples or ceremonies |
-| Ancient Name  | Krokrobrano | a lineage or old name         |
-
-Not every Nakudama has all of these, but elders, monks, and important figures often have formal or ancient names.
 
 ---
 
