@@ -83,6 +83,11 @@ const patternFamilies = {
 
   simpleRepeating: [
     () => {
+      let a = C();
+
+      return [a, a];
+    },
+    () => {
       let a = S();
       let b = S();
 
