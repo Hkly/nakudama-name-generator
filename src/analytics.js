@@ -1,7 +1,7 @@
 import Plausible from '@plausible-analytics/tracker'
 
 const plausible = Plausible({
-  hashMode: true,
+  hashBasedRouting: true,
   domain: 'hkly.io/nakudama-name-generator'
 })
 
