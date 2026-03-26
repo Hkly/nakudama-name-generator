@@ -1,17 +1,44 @@
-// --- Ghibli-inspired palette ---
-$bg:          #dde8d0;
-$bg-texture:  #cfdfc0;
-$card-bg:     #f4f7ee;
+// --- Ghibli-inspired palette (CSS custom properties) ---
+:root {
+  --bg:          #dde8d0;
+  --card-bg:     #f4f7ee;
+  --cream:       #faf7f0;
+  --green-dark:  #3d6b45;
+  --green-mid:   #5a8f65;
+  --green-light: #8dba90;
+  --green-pale:  #c8dfc2;
+  --text-dark:   #2e3d28;
+  --text-mid:    #4a5e40;
+  --text-soft:   #7a9170;
+
+  // gradient blob colors
+  --blob-a: rgba(168, 200, 144, 0.4);
+  --blob-b: rgba(122, 171, 106, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #1a2418;
+    --card-bg:     #222e1f;
+    --cream:       #2a3527;
+    --green-dark:  #559d5f;
+    --green-mid:   #4a7d52;
+    --green-light: #4a7d52;
+    --green-pale:  #2e4430;
+    --text-dark:   #ddeedd;
+    --text-mid:    #a8c4a0;
+    --text-soft:   #6a8f62;
+
+    --blob-a: rgba(40, 70, 35, 0.5);
+    --blob-b: rgba(30, 60, 28, 0.4);
+  }
+}
+
+// SCSS aliases for use in complex expressions (lighten, rgba, etc.)
 $green-dark:  #3d6b45;
 $green-mid:   #5a8f65;
 $green-light: #8dba90;
 $green-pale:  #c8dfc2;
-$cream:       #faf7f0;
-$text-dark:   #2e3d28;
-$text-mid:    #4a5e40;
-$text-soft:   #7a9170;
-$warm-accent: #c4875a;
-$warm-light:  #e8c9a8;
 
 * {
   box-sizing: border-box;
@@ -21,10 +48,10 @@ $warm-light:  #e8c9a8;
 
 body {
   font-family: 'Nunito', sans-serif;
-  background-color: $bg;
+  background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(#a8c890, 0.4) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(#7aab6a, 0.25) 0%, transparent 55%);
+    radial-gradient(ellipse at 20% 20%, var(--blob-a) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, var(--blob-b) 0%, transparent 55%);
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
@@ -42,13 +69,13 @@ body {
 }
 
 .card {
-  background: $card-bg;
+  background: var(--card-bg);
   border-radius: 2rem;
   padding: 2.5rem 2.5rem 3rem;
   box-shadow:
-    0 4px 24px rgba($green-dark, 0.12),
-    0 1px 4px rgba($green-dark, 0.08);
-  border: 1.5px solid rgba($green-light, 0.5);
+    0 4px 24px rgba(0, 0, 0, 0.15),
+    0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid var(--green-pale);
 
   @media (max-width: 480px) {
     padding: 1.75rem 1.25rem 2rem;
@@ -66,14 +93,14 @@ body {
     font-size: 2.8rem;
     display: block;
     margin-bottom: 0.3rem;
-    filter: drop-shadow(0 2px 4px rgba($green-dark, 0.2));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
 
   h1 {
     font-family: 'Lora', serif;
     font-size: 2.6rem;
     font-weight: 600;
-    color: $green-dark;
+    color: var(--green-dark);
     letter-spacing: 0.03em;
     line-height: 1.1;
 
@@ -85,7 +112,7 @@ body {
   .subtitle {
     font-family: 'Lora', serif;
     font-style: italic;
-    color: $text-soft;
+    color: var(--text-soft);
     font-size: 1rem;
     margin-top: 0.4rem;
 
@@ -123,8 +150,8 @@ body {
     align-items: center;
     padding: 0.5rem 1rem;
     border-radius: 999px;
-    border: 1.5px solid $green-pale;
-    background: $cream;
+    border: 1.5px solid var(--green-pale);
+    background: var(--cream);
     cursor: pointer;
     transition: all 0.18s ease;
     min-width: 90px;
@@ -137,14 +164,14 @@ body {
     }
 
     &:hover {
-      border-color: $green-mid;
-      background: lighten($green-pale, 6%);
+      border-color: var(--green-mid);
+      background: var(--green-pale);
     }
 
     &.active {
-      background: $green-dark;
-      border-color: $green-dark;
-      box-shadow: 0 2px 8px rgba($green-dark, 0.25);
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 
       .mode-label { color: #fff; }
       .mode-desc  { color: rgba(#fff, 0.7); }
@@ -153,13 +180,13 @@ body {
     .mode-label {
       font-weight: 600;
       font-size: 0.9rem;
-      color: $text-dark;
+      color: var(--text-dark);
       transition: color 0.18s;
     }
 
     .mode-desc {
       font-size: 0.72rem;
-      color: $text-soft;
+      color: var(--text-soft);
       margin-top: 0.1rem;
       transition: color 0.18s;
       text-align: center;
@@ -183,22 +210,22 @@ body {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 999px;
-  background: $green-dark;
+  background: var(--green-dark);
   color: #fff;
   cursor: pointer;
   letter-spacing: 0.04em;
-  box-shadow: 0 3px 12px rgba($green-dark, 0.3);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
   transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
   margin-bottom: 2rem;
 
   &:hover {
-    background: $green-mid;
-    box-shadow: 0 5px 16px rgba($green-dark, 0.35);
+    background: var(--green-mid);
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.25);
   }
 
   &:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 6px rgba($green-dark, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -216,21 +243,21 @@ body {
 }
 
 .name-card {
-  background: $cream;
-  border: 1.5px solid $green-pale;
+  background: var(--cream);
+  border: 1.5px solid var(--green-pale);
   border-radius: 1rem;
   padding: 0.7rem 1rem;
   text-align: center;
   font-family: 'Lora', serif;
   font-size: 1.15rem;
-  color: $text-dark;
+  color: var(--text-dark);
   letter-spacing: 0.02em;
-  box-shadow: 0 1px 4px rgba($green-dark, 0.07);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:hover {
-    border-color: $green-light;
-    box-shadow: 0 3px 10px rgba($green-dark, 0.12);
+    border-color: var(--green-light);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -244,7 +271,7 @@ body {
 
   h1, h2 {
     font-family: 'Lora', serif;
-    color: $green-dark;
+    color: var(--green-dark);
   }
 
   h1 {
@@ -260,44 +287,44 @@ body {
   h3 {
     font-family: 'Lora', serif;
     font-size: 1rem;
-    color: $text-mid;
+    color: var(--text-mid);
     margin-top: 0.25rem;
   }
 
   p {
-    color: $text-mid;
+    color: var(--text-mid);
     line-height: 1.75;
     font-size: 0.95rem;
   }
 
   ul, ol {
     padding-left: 1.4rem;
-    color: $text-mid;
+    color: var(--text-mid);
     font-size: 0.95rem;
     line-height: 1.75;
   }
 
   a {
-    color: $green-mid;
+    color: var(--green-mid);
     text-decoration: underline;
     text-underline-offset: 2px;
-    &:hover { color: $green-dark; }
+    &:hover { color: var(--green-dark); }
   }
 
   blockquote {
-    border-left: 3px solid $green-light;
+    border-left: 3px solid var(--green-light);
     margin: 0;
     padding: 0.4rem 1rem;
-    background: $cream;
+    background: var(--cream);
     border-radius: 0 0.5rem 0.5rem 0;
-    color: $text-mid;
+    color: var(--text-mid);
     font-style: italic;
     font-size: 0.95rem;
   }
 
   hr {
     border: none;
-    border-top: 1px solid $green-pale;
+    border-top: 1px solid var(--green-pale);
     margin: 0.5rem 0;
   }
 
@@ -307,8 +334,8 @@ body {
     font-size: 0.9rem;
 
     th {
-      background: $green-pale;
-      color: $text-dark;
+      background: var(--green-pale);
+      color: var(--text-dark);
       font-weight: 600;
       padding: 0.4rem 0.75rem;
       text-align: left;
@@ -316,8 +343,8 @@ body {
 
     td {
       padding: 0.4rem 0.75rem;
-      color: $text-mid;
-      border-bottom: 1px solid $green-pale;
+      color: var(--text-mid);
+      border-bottom: 1px solid var(--green-pale);
     }
 
     tr:last-child td {
@@ -326,7 +353,7 @@ body {
   }
 
   strong {
-    color: $text-dark;
+    color: var(--text-dark);
     font-weight: 600;
   }
 
@@ -341,12 +368,12 @@ body {
   font-family: 'Lora', serif;
   font-style: italic;
   font-size: 0.95rem;
-  color: $green-mid;
+  color: var(--green-mid);
   text-decoration: none;
   transition: color 0.15s;
 
   &:hover {
-    color: $green-dark;
+    color: var(--green-dark);
   }
 }
 
@@ -354,4 +381,3 @@ body {
   margin-top: 1.75rem;
   text-align: center;
 }
-
