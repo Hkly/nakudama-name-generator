@@ -212,6 +212,43 @@
     }
   }
 
+  .name-content {
+    @apply w-full;
+  }
+
+  .name-text {
+    @apply inline-flex items-center gap-1.5 cursor-pointer transition-colors duration-150;
+    position: relative;
+
+    &:hover {
+      color: var(--green-mid);
+    }
+  }
+
+  .copy-icon {
+    @apply opacity-0 text-sm transition-opacity duration-150;
+    position: relative;
+  }
+
+  .name-text:hover .copy-icon {
+    @apply opacity-100;
+  }
+
+  .copy-tooltip {
+    @apply absolute text-xs bg-green-900/80 text-white px-2 py-1 rounded whitespace-nowrap;
+    animation: fadeInOut 1.5s ease-in-out;
+    pointer-events: none;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% {
+      opacity: 0;
+    }
+    10%, 90% {
+      opacity: 1;
+    }
+  }
+
   /* --- About page --- */
 
   .about-body {
@@ -347,7 +384,20 @@
   }
 
   .expanded-name-value {
-    @apply font-serif text-lg tracking-wider;
+    @apply font-serif text-lg tracking-wider inline-flex items-center gap-1.5 cursor-pointer transition-colors duration-150;
     color: var(--text-dark);
+    position: relative;
+
+    &:hover {
+      color: var(--green-mid);
+
+      .copy-icon {
+        @apply opacity-100;
+      }
+    }
+  }
+
+  .expanded-name-value .copy-icon {
+    @apply opacity-0 text-sm transition-opacity duration-150;
   }
 }
