@@ -217,7 +217,7 @@
   }
 
   .name-text {
-    @apply inline-flex items-center gap-1.5 cursor-pointer transition-colors duration-150;
+    @apply inline-flex items-center cursor-pointer transition-colors duration-150;
     position: relative;
 
     &:hover {
@@ -227,7 +227,11 @@
 
   .copy-icon {
     @apply opacity-0 text-sm transition-opacity duration-150;
-    position: relative;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 4px;
   }
 
   .name-text:hover .copy-icon {
@@ -238,6 +242,8 @@
     @apply absolute text-xs bg-green-900/80 text-white px-2 py-1 rounded whitespace-nowrap;
     animation: fadeInOut 1.5s ease-in-out;
     pointer-events: none;
+    left: calc(55% + 4px);
+    bottom: calc(85%);
   }
 
   @keyframes fadeInOut {
@@ -384,7 +390,7 @@
   }
 
   .expanded-name-value {
-    @apply font-serif text-lg tracking-wider inline-flex items-center gap-1.5 cursor-pointer transition-colors duration-150;
+    @apply font-serif text-lg tracking-wider inline-flex items-center cursor-pointer transition-colors duration-150;
     color: var(--text-dark);
     position: relative;
 
@@ -399,5 +405,10 @@
 
   .expanded-name-value .copy-icon {
     @apply opacity-0 text-sm transition-opacity duration-150;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 4px;
   }
 }
