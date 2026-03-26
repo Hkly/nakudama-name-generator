@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { generateNames } from './generator.js'
 
 const MODES = ["any", "child", "modern", "formal", "ancient"]
@@ -54,8 +55,11 @@ export default function App() {
             ))}
           </ul>
         )}
+
+        <div className="card-footer">
+          <Link to="/about" className="about-link">About this name generator →</Link>
+        </div>
       </div>
     </div>
   )
 }
-
