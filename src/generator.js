@@ -22,8 +22,8 @@ const clusterSyllables = [
   "bra","bro","bru"
 ];
 
-// Special ending only
-const specialEndings = ["naku"];
+// Special ending pool used by ending-heavy patterns
+const specialEndings = ["naku", "muru", "raku", "kura"];
 
 // --- Helpers ---
 
@@ -49,7 +49,7 @@ function C() {
 }
 
 function NAKU() {
-  return "naku";
+  return rand(specialEndings);
 }
 
 // Capitalize final name
@@ -62,8 +62,14 @@ function capitalize(str) {
 const patternFamilies = {
   smooth: [
     (roots = []) => [roots[0] || S(), S()],
+    (roots = []) => [roots[0] || S(), roots[1] || S()],
     (roots = []) => [roots[0] || S(), roots[1] || S(), S()],
     (roots = []) => [roots[0] || S(), S(), roots[1] || S(), S()],
+    (roots = []) => [roots[0] || S(), roots[1] || S(), S(), S()],
+    // Root appears later (less common than root-first forms)
+    (roots = []) => [S(), roots[0] || S(), roots[1] || S()],
+    (roots = []) => [S(), S(), roots[0] || S(), roots[1] || S()],
+    (roots = []) => [S(), roots[0] || S(), roots[1] || S(), S()],
   ],
 
   croaky: [
@@ -79,6 +85,11 @@ const patternFamilies = {
     (roots = []) => [roots[0] || S(), C(), roots[1] || S(), S()],
     (roots = []) => [roots[0] || S(), C(), C(), roots[1] || S()],
     (roots = []) => [roots[0] || S(), roots[1] || S(), C(), C()],
+    // Root-later croaky openings
+    (roots = []) => [C(), roots[0] || S(), roots[1] || S()],
+    (roots = []) => [S(), C(), roots[0] || S(), roots[1] || C()],
+    (roots = []) => [C(), S(), C(), roots[0] || S(), roots[1] || S()],
+    (roots = []) => [C(), roots[0] || S(), roots[1] || S(), C()],
   ],
 
   simpleRepeating: [
@@ -131,6 +142,10 @@ const patternFamilies = {
     (roots = []) => [roots[0] || C(), C(), roots[1] || S(), S(), S()],
     (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), NAKU()],
     (roots = []) => [roots[0] || C(), S(), roots[1] || C(), C(), NAKU()],
+    // Ancient variants where root enters mid-word
+    (roots = []) => [C(), S(), roots[0] || C(), roots[1] || S(), NAKU()],
+    (roots = []) => [C(), C(), S(), roots[0] || C(), roots[1] || S()],
+    (roots = []) => [C(), roots[0] || C(), roots[1] || S(), S(), NAKU()],
   ],
 
   nakuEnding: [
@@ -140,6 +155,9 @@ const patternFamilies = {
     (roots = []) => [roots[0] || C(), roots[1] || C(), NAKU()],
     (roots = []) => [roots[0] || S(), roots[1] || S(), S(), NAKU()],
     (roots = []) => [roots[0] || C(), roots[1] || S(), S(), NAKU()],
+    // Root-later + ending variants
+    (roots = []) => [S(), roots[0] || S(), roots[1] || S(), NAKU()],
+    (roots = []) => [C(), S(), roots[0] || C(), roots[1] || S(), NAKU()],
   ]
 };
 
