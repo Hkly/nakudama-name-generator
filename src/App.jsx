@@ -2,6 +2,53 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { generateNames } from './generator.js'
 
+const CopyIcon = ({ size }) => (
+  <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+  </svg>
+)
+
+const NAME_TYPES = [
+  { key: 'child',    label: 'Child Name' },
+  { key: 'everyday', label: 'Everyday Name' },
+  { key: 'formal',   label: 'Formal Name' },
+  { key: 'ancient',  label: 'Ancient Name' },
+]
+
+function NamePill({ name, nameset, isExpanded, onToggle, copiedName, onCopy }) {
+  if (isExpanded && nameset) {
+    return (
+      <li className="expanded-name-pill" onClick={onToggle}>
+        <div className="expanded-names">
+          {NAME_TYPES.map(({ key, label }) => (
+            <div key={key} className="expanded-name-item">
+              <div className="expanded-name-type">{label}</div>
+              <div className="expanded-name-value" onClick={(e) => onCopy(e, nameset[key])}>
+                {nameset[key]}
+                <CopyIcon size={14} />
+                {copiedName === nameset[key] && <span className="copy-tooltip">Name copied!</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </li>
+    )
+  }
+
+  return (
+    <li className="name-card" onClick={onToggle}>
+      <div className="name-content">
+        <div className="name-text" onClick={(e) => onCopy(e, name)}>
+          {name}
+          <CopyIcon size={16} />
+          {copiedName === name && <span className="copy-tooltip">Name copied!</span>}
+        </div>
+      </div>
+    </li>
+  )
+}
+
 const MODES = ["any", "child", "modern", "formal", "ancient"]
 
 const MODE_LABELS = {
@@ -43,6 +90,19 @@ export default function App() {
 
   const selectedNameset = selectedIdx !== null ? PLACEHOLDER_NAMESETS[selectedIdx] : null
 
+  const renderColumn = (parity) =>
+    names.map((name, i) => i % 2 === parity ? (
+      <NamePill
+        key={i}
+        name={name}
+        nameset={selectedIdx === i ? selectedNameset : null}
+        isExpanded={selectedIdx === i}
+        onToggle={() => handleNameClick(i)}
+        copiedName={copiedName}
+        onCopy={handleCopyName}
+      />
+    ) : null)
+
   return (
     <div className="page">
       <div className="card">
@@ -82,110 +142,8 @@ export default function App() {
 
         {names.length > 0 && (
           <div className="name-grid-wrapper">
-            <div className="name-column">
-              {names.map((name, i) => (i % 2 === 0 ? (
-                selectedIdx === i ? (
-                  <li key={i} className="expanded-name-pill" onClick={() => handleNameClick(i)}>
-                    <div className="expanded-names">
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Child Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.child)}>
-                          {selectedNameset.child}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.child && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Everyday Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.everyday)}>
-                          {selectedNameset.everyday}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.everyday && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Formal Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.formal)}>
-                          {selectedNameset.formal}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.formal && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Ancient Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.ancient)}>
-                          {selectedNameset.ancient}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.ancient && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  <li key={i} className="name-card" onClick={() => handleNameClick(i)}>
-                    <div className="name-content">
-                      <div className="name-text" onClick={(e) => handleCopyName(e, name)}>
-                        {name}
-                        <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                        {copiedName === name && <span className="copy-tooltip">Name copied!</span>}
-                      </div>
-                    </div>
-                  </li>
-                )
-              ) : null))}
-            </div>
-            <div className="name-column">
-              {names.map((name, i) => (i % 2 === 1 ? (
-                selectedIdx === i ? (
-                  <li key={i} className="expanded-name-pill" onClick={() => handleNameClick(i)}>
-                    <div className="expanded-names">
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Child Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.child)}>
-                          {selectedNameset.child}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.child && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Everyday Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.everyday)}>
-                          {selectedNameset.everyday}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.everyday && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Formal Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.formal)}>
-                          {selectedNameset.formal}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.formal && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                      <div className="expanded-name-item">
-                        <div className="expanded-name-type">Ancient Name</div>
-                        <div className="expanded-name-value" onClick={(e) => handleCopyName(e, selectedNameset.ancient)}>
-                          {selectedNameset.ancient}
-                          <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                          {copiedName === selectedNameset.ancient && <span className="copy-tooltip">Name copied!</span>}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  <li key={i} className="name-card" onClick={() => handleNameClick(i)}>
-                    <div className="name-content">
-                      <div className="name-text" onClick={(e) => handleCopyName(e, name)}>
-                        {name}
-                        <svg className="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                        {copiedName === name && <span className="copy-tooltip">Name copied!</span>}
-                      </div>
-                    </div>
-                  </li>
-                )
-              ) : null))}
-            </div>
+            <div className="name-column">{renderColumn(0)}</div>
+            <div className="name-column">{renderColumn(1)}</div>
           </div>
         )}
 
