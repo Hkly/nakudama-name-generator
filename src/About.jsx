@@ -7,6 +7,7 @@ export default function About() {
   return (
     <div className="page">
       <div className="card">
+        <Link to="/" className="back-link">← Back to Generator</Link>
         <div className="about-body">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{aboutContent}</ReactMarkdown>
         </div>
