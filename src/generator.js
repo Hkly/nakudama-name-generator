@@ -61,103 +61,98 @@ function capitalize(str) {
 
 const patternFamilies = {
   smooth: [
-    (roots = []) => [roots[0] || S(), S()],
-    (roots = []) => [roots[0] || S(), roots[1] || S()],
-    (roots = []) => [roots[0] || S(), roots[1] || S(), S()],
-    (roots = []) => [roots[0] || S(), S(), roots[1] || S(), S()],
-    (roots = []) => [roots[0] || S(), roots[1] || S(), S(), S()],
+    ([rootA, rootB]) => [rootA, S()],
+    ([rootA, rootB]) => [rootA, rootB],
+    ([rootA, rootB]) => [rootA, rootB, S()],
+    ([rootA, rootB]) => [rootA, S(), rootB, S()],
+    ([rootA, rootB]) => [rootA, rootB, S(), S()],
     // Root appears later (less common than root-first forms)
-    (roots = []) => [S(), roots[0] || S(), roots[1] || S()],
-    (roots = []) => [S(), S(), roots[0] || S(), roots[1] || S()],
-    (roots = []) => [S(), roots[0] || S(), roots[1] || S(), S()],
+    ([rootA, rootB]) => [S(), rootA, rootB],
+    ([rootA, rootB]) => [S(), S(), rootA, rootB],
+    ([rootA, rootB]) => [S(), rootA, rootB, S()],
+    ([rootA, rootB]) => [S(), S(), rootA, rootB],
   ],
 
   croaky: [
-    (roots = []) => [roots[0] || C(), S(), roots[1] || S()],
-    (roots = []) => [roots[0] || S(), C(), roots[1] || S()],
-    (roots = []) => [roots[0] || S(), roots[1] || S(), C()],
-    (roots = []) => [roots[0] || C(), C(), roots[1] || S()],
-    (roots = []) => [roots[0] || C(), S(), roots[1] || C()],
-    (roots = []) => [roots[0] || S(), C(), roots[1] || C()],
-    (roots = []) => [roots[0] || S(), C(), roots[1] || S(), C()],
-    (roots = []) => [roots[0] || C(), S(), roots[1] || S(), C()],
-    (roots = []) => [roots[0] || C(), C(), roots[1] || S(), S()],
-    (roots = []) => [roots[0] || S(), C(), roots[1] || S(), S()],
-    (roots = []) => [roots[0] || S(), C(), C(), roots[1] || S()],
-    (roots = []) => [roots[0] || S(), roots[1] || S(), C(), C()],
+    ([rootA, rootB]) => [rootA, S(), rootB],
+    ([rootA, rootB]) => [rootA, C(), rootB],
+    ([rootA, rootB]) => [rootA, rootB, C()],
+    ([rootA, rootB]) => [rootA, C(), rootB],
+    ([rootA, rootB]) => [rootA, S(), rootB, C()],
+    ([rootA, rootB]) => [rootA, C(), rootB, C()],
+    ([rootA, rootB]) => [rootA, C(), rootB, C()],
+    ([rootA, rootB]) => [rootA, S(), rootB, C()],
+    ([rootA, rootB]) => [rootA, C(), rootB, S()],
+    ([rootA, rootB]) => [rootA, C(), rootB, S()],
+    ([rootA, rootB]) => [rootA, C(), C(), rootB],
+    ([rootA, rootB]) => [rootA, rootB, C(), C()],
     // Root-later croaky openings
-    (roots = []) => [C(), roots[0] || S(), roots[1] || S()],
-    (roots = []) => [S(), C(), roots[0] || S(), roots[1] || C()],
-    (roots = []) => [C(), S(), C(), roots[0] || S(), roots[1] || S()],
-    (roots = []) => [C(), roots[0] || S(), roots[1] || S(), C()],
+    ([rootA, rootB]) => [C(), rootA, rootB],
+    ([rootA, rootB]) => [S(), C(), rootA, rootB],
+    ([rootA, rootB]) => [C(), S(), C(), rootA, rootB],
+    ([rootA, rootB]) => [C(), rootA, rootB, C()],
   ],
 
   simpleRepeating: [
-    (roots = []) => {
-      const a = roots[0] || C();
-
-      return [a, a];
+    ([rootA]) => {
+      return [rootA, rootA];
     },
-    (roots = []) => {
-      const a = roots[0] || S();
-      let b = roots[1] || S();
+    ([rootA, rootB]) => {
+      let b = rootB;
 
-      while (a === b) {
+      while (rootA === b) {
         b = S();
       }
 
-      return [a, b, a, b];
+      return [rootA, b, rootA, b];
     }
   ],
 
   clusterRepeating: [
     // one cluster, one simple
-    (roots = []) => {
-      const a = roots[0] || C();
-      let b = roots[1] || S();
-      while (a === b) b = S();
+    ([rootA, rootB]) => {
+      let b = rootB;
+      while (rootA === b) b = S();
 
-      return [a, b, a, b];
+      return [rootA, b, rootA, b];
     },
-    (roots = []) => {
-      const a = roots[0] || S();
-      let b = roots[1] || C();
-      while (a === b) b = C();
+    ([rootA, rootB]) => {
+      let b = rootB;
+      while (rootA === b) b = C();
 
-      return [a, b, a, b];
+      return [rootA, b, rootA, b];
     },
     // both clusters
-    (roots = []) => {
-      const a = roots[0] || C();
-      let b = roots[1] || C();
-      while (a === b) b = C();
-      return [a, b, a, b];
+    ([rootA, rootB]) => {
+      let b = rootB;
+      while (rootA === b) b = C();
+      return [rootA, b, rootA, b];
     },
   ],
 
   ancientLong: [
-    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), S()],
-    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), C()],
-    (roots = []) => [roots[0] || C(), S(), roots[1] || S(), C(), C()],
-    (roots = []) => [roots[0] || C(), C(), roots[1] || S(), S(), S()],
-    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), S(), NAKU()],
-    (roots = []) => [roots[0] || C(), S(), roots[1] || C(), C(), NAKU()],
+    ([rootA, rootB]) => [rootA, S(), rootB, S(), S()],
+    ([rootA, rootB]) => [rootA, S(), rootB, S(), C()],
+    ([rootA, rootB]) => [rootA, S(), rootB, C(), C()],
+    ([rootA, rootB]) => [rootA, C(), rootB, S(), S()],
+    ([rootA, rootB]) => [rootA, S(), rootB, S(), NAKU()],
+    ([rootA, rootB]) => [rootA, S(), rootB, C(), NAKU()],
     // Ancient variants where root enters mid-word
-    (roots = []) => [C(), S(), roots[0] || C(), roots[1] || S(), NAKU()],
-    (roots = []) => [C(), C(), S(), roots[0] || C(), roots[1] || S()],
-    (roots = []) => [C(), roots[0] || C(), roots[1] || S(), S(), NAKU()],
+    ([rootA, rootB]) => [C(), S(), rootA, rootB, NAKU()],
+    ([rootA, rootB]) => [C(), C(), S(), rootA, rootB],
+    ([rootA, rootB]) => [C(), rootA, rootB, S(), NAKU()],
   ],
 
   nakuEnding: [
-    (roots = []) => [roots[0] || S(), roots[1] || S(), NAKU()],
-    (roots = []) => [roots[0] || C(), roots[1] || S(), NAKU()],
-    (roots = []) => [roots[0] || S(), roots[1] || C(), NAKU()],
-    (roots = []) => [roots[0] || C(), roots[1] || C(), NAKU()],
-    (roots = []) => [roots[0] || S(), roots[1] || S(), S(), NAKU()],
-    (roots = []) => [roots[0] || C(), roots[1] || S(), S(), NAKU()],
+    ([rootA, rootB]) => [rootA, rootB, NAKU()],
+    ([rootA, rootB]) => [rootA, S(), rootB, NAKU()],
+    ([rootA, rootB]) => [rootA, rootB, C(), NAKU()],
+    ([rootA, rootB]) => [C(), rootA, rootB, NAKU()],
+    ([rootA, rootB]) => [rootA, rootB, S(), NAKU()],
+    ([rootA, rootB]) => [rootA, C(), rootB, S(), NAKU()],
     // Root-later + ending variants
-    (roots = []) => [S(), roots[0] || S(), roots[1] || S(), NAKU()],
-    (roots = []) => [C(), S(), roots[0] || C(), roots[1] || S(), NAKU()],
+    ([rootA, rootB]) => [S(), rootA, rootB, NAKU()],
+    ([rootA, rootB]) => [C(), S(), rootA, rootB, NAKU()],
   ]
 };
 
@@ -236,27 +231,6 @@ function syllablesToName(syllables) {
 
 // --- Name Generator ---
 
-function generateName(mode) {
-  const familyName = chooseFamily(mode);
-  const family = patternFamilies[familyName];
-  const pattern = rand(family);
-  const syllables = pattern();
-  const name = syllablesToName(syllables);
-
-  if (!name) {
-    return generateName(mode);
-  }
-
-  return name;
-}
-export function generateNames(count = 8, mode = "modern") {
-  const names = new Set();
-  while (names.size < count) {
-    names.add(generateName(mode));
-  }
-  return [...names];
-}
-
 function generateBase() {
   // Generate 2-3 syllables as a base
   const baseFamilies = [
@@ -280,30 +254,27 @@ function generateBase() {
 
   const pattern = rand(baseFamilies);
   const baseSyllables = pattern();
-  const base = baseSyllables.join("");
+  const [rootA, ...rest] = baseSyllables;
+  const rootB = rest[rest.length - 1] || rootA;
+  const base = [rootA, rootB].join("");
 
   // Avoid sacred word
   if (base.includes("dama")) {
     return generateBase();
   }
 
-  return {
-    base,
-    syllables: baseSyllables,
-  };
+  return [rootA, rootB];
 }
 
 function buildVariantFromBase(rootSyllables, mode) {
   const family = patternFamilies[chooseFamily(mode)];
   const pattern = rand(family);
-  const rootA = rootSyllables[0] || S();
-  const rootB = rootSyllables[rootSyllables.length - 1] || rootA;
-  const syllables = pattern([rootA, rootB]);
+  const syllables = pattern(rootSyllables);
   return syllablesToName(syllables);
 }
 
 export function generateNameset() {
-  const { syllables: rootSyllables } = generateBase();
+  const rootSyllables = generateBase();
 
   let childName = null;
   let everydayName = null;
