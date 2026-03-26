@@ -96,7 +96,7 @@
     .subtitle {
       @apply font-serif italic;
       color: var(--text-soft);
-      @apply text-base mx-20 mt-1;
+      @apply text-base mx-10 mt-1;
 
       @media (max-width: 480px) {
         @apply text-sm mx-0 mt-1;
