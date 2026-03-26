@@ -25,7 +25,7 @@ export default function App() {
           <p className="subtitle">
             Built from soft syllables and croaky consonant clusters, Nakudama names are meant to sound a bit like frogs calling across the marsh.
             <br />
-            <Link to="/about" className="about-link">Read more about the Naku Naku names!</Link>
+            <Link to="/about" className="about-link">Read more about the Naku Naku names →</Link>
           </p>
         </div>
 
