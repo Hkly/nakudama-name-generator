@@ -245,6 +245,17 @@ function syllablesToName(syllables) {
     return capitalize(half) + capitalize(half);
   }
 
+  // Split long names
+  if (syllables.length > 4) {
+    const minFirstPart = 2;
+    const maxFirstPart = syllables.length - 2;
+    const splitPoint = minFirstPart + Math.floor(Math.random() * (maxFirstPart - minFirstPart + 1));
+
+    const firstPart = capitalize(syllables.slice(0, splitPoint).join(""));
+    const secondPart = capitalize(syllables.slice(splitPoint).join(""));
+    return firstPart + " " + secondPart;
+  }
+
   return capitalize(name);
 }
 
