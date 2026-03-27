@@ -1,15 +1,15 @@
 // --- Sound Weights (tune these to control consonant frequency) ---
 
 const soundWeights = [
-  { sound: "r", weight: 30 },
+  { sound: "r", weight: 25 },
   { sound: "g", weight: 20 },
   { sound: "k", weight: 15 },
   { sound: "b", weight: 15 },
   { sound: "m", weight: 15 },
-  { sound: "n", weight: 10 },
+  { sound: "n", weight: 15 },
   { sound: "s", weight: 7 },
   { sound: "t", weight: 7 },
-  { sound: "d", weight: 4 },
+  { sound: "d", weight: 5 },
 ];
 
 // --- Syllable Pools ---
@@ -84,13 +84,20 @@ const patternFamilies = {
     ([rootA, rootB]) => [rootA, S(), C(), rootB],
     ([rootA, rootB]) => [rootA, C(), rootB, S()],
     ([rootA, rootB]) => [rootA, rootB, S(), C()],
-    ([rootA, rootB]) => [rootA, C(), C(), rootB],
+    ([rootA, rootB]) => [rootA, rootB, C(), S()],
     ([rootA, rootB]) => [rootA, rootB, C(), C()],
     // Root-later croaky openings
     ([rootA, rootB]) => [C(), rootA, rootB],
     ([rootA, rootB]) => [S(), C(), rootA, rootB],
     ([rootA, rootB]) => [C(), S(), C(), rootA, rootB],
     ([rootA, rootB]) => [C(), rootA, rootB, C()],
+    // Echo patterns — rootA appears twice
+    ([rootA, rootB]) => [rootA, C(), rootA, rootB],
+    ([rootA, rootB]) => [rootA, rootB, C(), rootA],
+    ([rootA, rootB]) => [C(), rootA, rootB, rootA],
+    ([rootA, rootB]) => [rootA, S(), rootA, C()],
+    ([rootA, rootB]) => [C(), rootA, rootA],
+    ([rootA, rootB]) => [C(), rootB, rootB],
   ],
 
   simpleRepeating: [
@@ -100,7 +107,7 @@ const patternFamilies = {
     ([rootA, rootB]) => {
       let b = rootB;
 
-      while (rootA === b) {
+      while (rootA === b || b.length > 2) {
         b = S();
       }
 
@@ -141,6 +148,12 @@ const patternFamilies = {
     ([rootA, rootB]) => [C(), S(), rootA, rootB, NAKU()],
     ([rootA, rootB]) => [C(), C(), S(), rootA, rootB],
     ([rootA, rootB]) => [C(), rootA, rootB, S(), NAKU()],
+    // Echo patterns — rootA bookends or repeats for ritual feel
+    ([rootA, rootB]) => [rootA, S(), rootA, rootB, S()],
+    ([rootA, rootB]) => [rootA, S(), rootB, S(), rootA],
+    ([rootA, rootB]) => [rootA, rootB, S(), rootA, NAKU()],
+    ([rootA, rootB]) => [C(), rootA, S(), rootB, rootA],
+    ([rootA, rootB]) => [rootA, S(), rootA, rootB, NAKU()],
   ],
 
   nakuEnding: [
@@ -153,6 +166,12 @@ const patternFamilies = {
     // Root-later + ending variants
     ([rootA, rootB]) => [S(), rootA, rootB, NAKU()],
     ([rootA, rootB]) => [C(), S(), rootA, rootB, NAKU()],
+    // Echo patterns — rootA repeats before the special ending
+    ([rootA, rootB]) => [rootA, rootA, NAKU()],
+    ([rootA, rootB]) => [rootA, rootB, rootA, NAKU()],
+    ([rootA, rootB]) => [rootA, S(), rootA, rootB, NAKU()],
+    ([rootA, rootB]) => [C(), rootA, rootB, rootA, NAKU()],
+    ([rootA, rootB]) => [rootA, rootB, S(), rootA, NAKU()],
   ]
 };
 
@@ -168,9 +187,9 @@ const modes = {
   },
   child: {
     smooth: 25,
-    croaky: 5,
+    croaky: 0,
     simpleRepeating: 65,
-    clusterRepeating: 15,
+    clusterRepeating: 0,
     nakuEnding: 0
   },
   modern: {
@@ -189,11 +208,11 @@ const modes = {
   },
   ancient: {
     smooth: 5,
-    croaky: 40,
+    croaky: 10,
     simpleRepeating: 0,
     clusterRepeating: 0,
     nakuEnding: 35,
-    ancientLong: 30
+    ancientLong: 40
   }
 };
 
